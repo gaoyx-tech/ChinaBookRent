@@ -123,6 +123,8 @@ namespace ChinaBookRent
             DataPic_bookOutDate = new System.Windows.Forms.DateTimePicker();
             DataPic_bookOutDate.Location = new System.Drawing.Point(180, 425);
             this.tabPage2.Controls.Add(DataPic_bookOutDate);
+            //
+            DataPic_bookOutDate.ValueChanged += DataPic_bookOutDate_ValueChanged;
 
             //书籍归还日期
             label_bookBackDate = new System.Windows.Forms.Label();
@@ -136,6 +138,11 @@ namespace ChinaBookRent
             DataPic_bookBackDate = new System.Windows.Forms.DateTimePicker();
             DataPic_bookBackDate.Location = new System.Drawing.Point(180, 495);
             this.tabPage2.Controls.Add(DataPic_bookBackDate);
+            //
+            //
+            System.DateTime dt = DataPic_bookOutDate.Value;
+            System.DateTime dtBack = dt + new System.TimeSpan(29, 0, 0, 0);
+            DataPic_bookBackDate.Value = dtBack;
 
             //借书人卡号
             label_personCardNum = new System.Windows.Forms.Label();
@@ -159,6 +166,13 @@ namespace ChinaBookRent
             btn_startOutBook.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(btn_startOutBook);
             btn_startOutBook.Click += Btn_startOutBook_Click;
+        }
+
+        private void DataPic_bookOutDate_ValueChanged(object sender, System.EventArgs e)
+        {
+            System.DateTime dt = DataPic_bookOutDate.Value;
+            System.DateTime dtBack = dt + new System.TimeSpan(29, 0, 0, 0);
+            DataPic_bookBackDate.Value = dtBack;
         }
 
         private void Btn_startOutBook_Click(object sender, System.EventArgs e)

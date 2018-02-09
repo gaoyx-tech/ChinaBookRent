@@ -115,6 +115,7 @@ namespace ChinaBookRent
             conn.Close();
         }
 
+        //开始查询
         private void Btn_startFindBooks_Click(object sender, System.EventArgs e)
         {
             //
@@ -150,6 +151,8 @@ namespace ChinaBookRent
                     string bookValue = reader.GetString(3);
                     string publisher = reader.GetString(2);
                     //
+                    bool isOver = compareIsOverDue(bookBackDate);
+                    //
                     ListViewItem lvi = new ListViewItem();
                     lvi.Text = bookName;
                     lvi.SubItems.Add(bookISBN);
@@ -158,12 +161,26 @@ namespace ChinaBookRent
                     lvi.SubItems.Add(bookBackDate);
                     lvi.SubItems.Add(bookValue);
                     lvi.SubItems.Add(publisher);
+                    if (isOver) {
+                        lvi.BackColor = Color.Red;//过期标红色
+                    }
                     listview_books.Items.Add(lvi);
                 }
                 this.listview_books.EndUpdate();
             }
             cmd.Dispose();
             conn.Close();
+        }
+
+        //比对时间
+        public bool compareIsOverDue(string date)
+        {
+            string s1 = date.Replace('年','-');
+            string s2 = s1.Replace('月','-');
+            string s3 = s2.Remove(s2.Length - 1);
+            //获取当前日期
+            int compare = System.DateTime.Compare(System.DateTime.Parse(s3), System.DateTime.Now);//如果小于0则是t1小于t2，说明过期了
+            return compare < 0;
         }
     }
 }

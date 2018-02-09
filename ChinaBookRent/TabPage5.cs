@@ -31,7 +31,7 @@ namespace ChinaBookRent
             cb_personCondition.Items.Add("查询所有借书人");
             cb_personCondition.Items.Add("按照姓名查询人");
             cb_personCondition.Items.Add("按照卡号查询人");
-            cb_personCondition.Items.Add("按手机号查询人");
+            cb_personCondition.Items.Add("按照手机号查询人");
             cb_personCondition.SelectedIndex = 0;
             this.tabPage5.Controls.Add(cb_personCondition);
 
@@ -103,11 +103,17 @@ namespace ChinaBookRent
                         string bookValue = reader.GetString(3);
                         string bookBack = reader.GetString(5);
                         //
+                        bool isOver = compareIsOverDue(bookBack);
+                        //
                         ListViewItem lvi = new ListViewItem();
                         lvi.Text = bookName;
                         lvi.SubItems.Add(bookISBN);
                         lvi.SubItems.Add(bookValue);
                         lvi.SubItems.Add(bookBack);
+                        if (isOver)
+                        {
+                            lvi.BackColor = Color.Red;
+                        }
                         listview_personOfBooks.Items.Add(lvi);
                     }
                     this.listview_personOfBooks.EndUpdate();
