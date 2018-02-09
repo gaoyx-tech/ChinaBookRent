@@ -241,7 +241,7 @@ namespace ChinaBookRent
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage4.Size = new System.Drawing.Size(1909, 914);
             this.tabPage4.TabIndex = 1;
-            this.tabPage4.Text = "按照书籍查询信息";
+            this.tabPage4.Text = "按书籍查询信息";
             this.tabPage4.UseVisualStyleBackColor = true;
             //
             initTabPage4();
@@ -252,7 +252,7 @@ namespace ChinaBookRent
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(1909, 914);
             this.tabPage5.TabIndex = 1;
-            this.tabPage5.Text = "按照人员查询借书信息";
+            this.tabPage5.Text = "按人员查询借书信息";
             this.tabPage5.UseVisualStyleBackColor = true;
             //
             initTabPage5();

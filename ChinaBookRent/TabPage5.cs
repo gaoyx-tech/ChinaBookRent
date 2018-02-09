@@ -60,6 +60,61 @@ namespace ChinaBookRent
             listview_personInfos.Columns.Add("借书卡号", 180, HorizontalAlignment.Center);
             listview_personInfos.Columns.Add("手机号", 160, HorizontalAlignment.Center);
             this.tabPage5.Controls.Add(listview_personInfos);
+            listview_personInfos.Click += Listview_personInfos_Click;
+            //
+            //
+            listview_personOfBooks = new ListView();
+            listview_personOfBooks.Location = new Point(760, 76);
+            listview_personOfBooks.Size = new Size(400, 300);
+            listview_personOfBooks.View = View.Details;
+            listview_personOfBooks.GridLines = true;
+            listview_personOfBooks.FullRowSelect = true;
+            listview_personOfBooks.Columns.Add("书名", 100, HorizontalAlignment.Center);
+            listview_personOfBooks.Columns.Add("ISBN号", 144, HorizontalAlignment.Center);
+            listview_personOfBooks.Columns.Add("价格", 50, HorizontalAlignment.Center);
+            listview_personOfBooks.Columns.Add("归还日期", 130, HorizontalAlignment.Center);
+            this.tabPage5.Controls.Add(listview_personOfBooks);
+        }
+
+        private void Listview_personInfos_Click(object sender, System.EventArgs e)
+        {
+            //点击某一个人显示他的所有借书
+            if (listview_personInfos.SelectedItems.Count > 0)
+            {
+                string sCardNo = listview_personInfos.SelectedItems[0].SubItems[2].Text;
+                //
+                //
+                listview_personOfBooks.Items.Clear();
+                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+                conn.Open();
+                string sql = string.Format("select * from RentBookInfo where personCardNum = '{0}'", sCardNo);
+                //
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = sql;
+                cmd.Connection = conn;
+                System.Data.SQLite.SQLiteDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    this.listview_personOfBooks.BeginUpdate();
+                    while (reader.Read())
+                    {
+                        string bookName = reader.GetString(6);
+                        string bookISBN = reader.GetString(0);
+                        string bookValue = reader.GetString(3);
+                        string bookBack = reader.GetString(5);
+                        //
+                        ListViewItem lvi = new ListViewItem();
+                        lvi.Text = bookName;
+                        lvi.SubItems.Add(bookISBN);
+                        lvi.SubItems.Add(bookValue);
+                        lvi.SubItems.Add(bookBack);
+                        listview_personOfBooks.Items.Add(lvi);
+                    }
+                    this.listview_personOfBooks.EndUpdate();
+
+                }
+            }
+
         }
 
         private void Btn_startPersonInfo_Click(object sender, System.EventArgs e)

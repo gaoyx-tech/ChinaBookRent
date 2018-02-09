@@ -27,11 +27,12 @@ namespace ChinaBookRent
             //
             combo_type = new ComboBox();
             combo_type.DropDownStyle = ComboBoxStyle.DropDownList;
+            combo_type.Items.Add("查询所有借出图书");
             combo_type.Items.Add("按书名查询");
             combo_type.Items.Add("按ISBN查询");
             combo_type.Items.Add("按出版社查询");
             this.combo_type.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            combo_type.Size = new Size(combo_type.Width + 40, combo_type.Height);
+            combo_type.Size = new Size(combo_type.Width + 60, combo_type.Height);
             combo_type.Location = new Point(200, 60);
             this.tabPage4.Controls.Add(combo_type);
             combo_type.SelectedIndex = 0;
@@ -123,11 +124,13 @@ namespace ChinaBookRent
             conn.Open();
             //
             int nSel = combo_type.SelectedIndex;
-            string sql_findbook = string.Format("select * from RentBookInfo where bookName like '%{0}%'", tb_condition.Text);
+            string sql_findbook = "select * from RentBookInfo";
             //
             if (nSel == 1)
-                sql_findbook = string.Format("select * from RentBookInfo where bookISBN = '{0}'", tb_condition.Text);
+                sql_findbook = string.Format("select * from RentBookInfo where bookName like '%{0}%'", tb_condition.Text);
             else if (nSel == 2)
+                sql_findbook = string.Format("select * from RentBookInfo where bookISBN = '{0}'", tb_condition.Text);
+            else if (nSel == 3)
                 sql_findbook = string.Format("select * from RentBookInfo where bookPublisher = '{0}'", tb_condition.Text);
             //
             System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
