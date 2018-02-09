@@ -34,6 +34,8 @@ namespace ChinaBookRent
 
         private void initTabPage1()
         {
+            tabPage1.BackColor = System.Drawing.Color.Azure;
+            
             this.labelPersonName = new System.Windows.Forms.Label();
             this.labelPersonName.AutoSize = true;
             this.labelPersonName.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -145,6 +147,7 @@ namespace ChinaBookRent
             cmd.ExecuteNonQuery();
             System.Windows.Forms.MessageBox.Show("删除借书人员成功", "提示");
             //
+            cmd.Dispose();
             conn.Close();
         }
 
@@ -161,11 +164,13 @@ namespace ChinaBookRent
             cmd.ExecuteNonQuery();
             System.Windows.Forms.MessageBox.Show("新建借书人员成功", "提示");
             //
+            cmd.Dispose();
             conn.Close();
         }
 
         private void InitializeComponent()
         {
+            this.BackColor = System.Drawing.Color.White;
             this.lableWelcome = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -216,6 +221,7 @@ namespace ChinaBookRent
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "办理借出书籍";
             this.tabPage2.UseVisualStyleBackColor = true;
+            //
             this.initTabPage2();
             // 
             // tabPage3
@@ -248,6 +254,8 @@ namespace ChinaBookRent
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "按照人员查询借书信息";
             this.tabPage5.UseVisualStyleBackColor = true;
+            //
+            initTabPage5();
             // 
             // Form1
             // 

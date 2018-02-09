@@ -16,6 +16,7 @@ namespace ChinaBookRent
         //
         private void initTabPage4()
         {
+            tabPage4.BackColor = Color.SeaShell;
             label_type = new Label();
             label_type.Location = new Point(30, 65);
             label_type.AutoSize = true;

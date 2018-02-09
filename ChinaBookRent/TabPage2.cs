@@ -30,6 +30,7 @@ namespace ChinaBookRent
 
         private void initTabPage2()
         {
+            tabPage2.BackColor = System.Drawing.Color.Ivory;
             this.label_CheckBook = new System.Windows.Forms.Label();
             this.label_CheckBook.Location = new System.Drawing.Point(30, 30);
             this.label_CheckBook.Text = "请检查此书是否可借出（请输入书籍ISBN号码）";

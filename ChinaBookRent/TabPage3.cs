@@ -15,6 +15,8 @@ namespace ChinaBookRent
 
         private void initTabPage3()
         {
+            tabPage3.BackColor = Color.AliceBlue;
+
             this.label_backBookISBN = new Label();
             this.label_backBookISBN.Location = new Point(50, 50);
             this.label_backBookISBN.Text = "请输入书籍ISBN号码：";
