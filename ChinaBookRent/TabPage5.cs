@@ -56,7 +56,7 @@ namespace ChinaBookRent
             listview_personInfos.FullRowSelect = true;
             listview_personInfos.GridLines = true;
             listview_personInfos.Columns.Add("姓名", 100, HorizontalAlignment.Center);
-            listview_personInfos.Columns.Add("身份证号", 180, HorizontalAlignment.Center);
+            listview_personInfos.Columns.Add("身份证号", 200, HorizontalAlignment.Center);
             listview_personInfos.Columns.Add("借书卡号", 180, HorizontalAlignment.Center);
             listview_personInfos.Columns.Add("手机号", 160, HorizontalAlignment.Center);
             this.tabPage5.Controls.Add(listview_personInfos);
@@ -64,7 +64,40 @@ namespace ChinaBookRent
 
         private void Btn_startPersonInfo_Click(object sender, System.EventArgs e)
         {
+            listview_personInfos.Items.Clear();
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            conn.Open();
+            //
+            string sql_findInfo = "select * from RentPersonInfo";
+            if (cb_personCondition.SelectedIndex == 1) sql_findInfo = string.Format("select * from RentPersonInfo where personName = '{0}'", tb_personCondition.Text);
+            else if (cb_personCondition.SelectedIndex == 2) sql_findInfo = string.Format("select * from RentPersonInfo where personCardNum = '{0}'", tb_personCondition.Text);
+            else if (cb_personCondition.SelectedIndex == 3) sql_findInfo = string.Format("select * from RentPersonInfo where mobile = '{0}'", tb_personCondition.Text);
 
+            System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+            cmd.CommandText = sql_findInfo;
+            cmd.Connection = conn;
+            System.Data.SQLite.SQLiteDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                this.listview_personInfos.BeginUpdate();
+                while (reader.Read())
+                {
+                    string personName = reader.GetString(0);
+                    string personNum = reader.GetString(1);
+                    string personCardNo = reader.GetString(2);
+                    string mobile = reader.GetString(3);
+                    //
+                    ListViewItem lvi = new ListViewItem();
+                    lvi.Text = personName;
+                    lvi.SubItems.Add(personNum);
+                    lvi.SubItems.Add(personCardNo);
+                    lvi.SubItems.Add(mobile);
+                    listview_personInfos.Items.Add(lvi);
+                }
+                this.listview_personInfos.EndUpdate();
+            }
+            cmd.Dispose();
+            conn.Close();
         }
     }
 }
