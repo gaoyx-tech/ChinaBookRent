@@ -17,6 +17,8 @@ namespace ChinaBookRent
 
         private void initTabPage5()
         {
+            tabPage5.BackColor = Color.AliceBlue;
+
             lb_personCondition = new Label();
             lb_personCondition.Location = new Point(40, 40);
             lb_personCondition.Text = "按条件查询借书人：";
@@ -91,12 +93,12 @@ namespace ChinaBookRent
 
         private void Btn_startReturnBook_Click(object sender, System.EventArgs e)
         {
-            if(listview_personOfBooks.SelectedItems.Count > 0 )
+            if (listview_personOfBooks.SelectedItems.Count > 0)
             {
                 string bookISBN = listview_personOfBooks.SelectedItems[0].SubItems[1].Text;
                 string personCardNo = listview_personOfBooks.SelectedItems[0].SubItems[4].Text;
                 //
-                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
                 conn.Open();
                 //
                 string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", bookISBN, personCardNo);
@@ -122,7 +124,7 @@ namespace ChinaBookRent
                 //
                 //
                 listview_personOfBooks.Items.Clear();
-                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
                 conn.Open();
                 string sql = string.Format("select * from RentBookInfo where personCardNum = '{0}'", sCardNo);
                 //
@@ -164,7 +166,7 @@ namespace ChinaBookRent
         private void Btn_startPersonInfo_Click(object sender, System.EventArgs e)
         {
             listview_personInfos.Items.Clear();
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
             string sql_findInfo = "select * from RentPersonInfo";

@@ -98,7 +98,7 @@ namespace ChinaBookRent
                 string bookISBN = listview_books.SelectedItems[0].SubItems[1].Text;
                 string personCardNo = listview_books.SelectedItems[0].SubItems[2].Text;
                 //
-                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
                 conn.Open();
                 //
                 string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", bookISBN, personCardNo);
@@ -126,7 +126,7 @@ namespace ChinaBookRent
         private void displayPersonDetail(string personNo)
         {
             //
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
             string sql_findInfo = string.Format("select * from RentPersonInfo where personCardNum = '{0}'", personNo);
@@ -154,7 +154,7 @@ namespace ChinaBookRent
             //
             listview_books.Items.Clear();
             //
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
             int nSel = combo_type.SelectedIndex;

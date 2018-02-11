@@ -35,7 +35,7 @@ namespace ChinaBookRent
         private void initTabPage1()
         {
             tabPage1.BackColor = System.Drawing.Color.Azure;
-            
+
             this.labelPersonName = new System.Windows.Forms.Label();
             this.labelPersonName.AutoSize = true;
             this.labelPersonName.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -137,7 +137,7 @@ namespace ChinaBookRent
 
         private void Btn_deletePerson_Click(object sender, System.EventArgs e)
         {
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
             string sql_del = string.Format("delete from RentPersonInfo where personCardNum = '{0}'", TextBoxPersonCardNum.Text);
@@ -153,7 +153,7 @@ namespace ChinaBookRent
 
         private void Btn_createPerson_Click(object sender, System.EventArgs e)
         {
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
             string sql_insert = string.Format("insert into RentPersonInfo values ('{0}','{1}','{2}','{3}','{4}','{5}')",
@@ -168,6 +168,7 @@ namespace ChinaBookRent
             conn.Close();
         }
 
+        string sDataBaseStr = "";
         private void InitializeComponent()
         {
             this.BackColor = System.Drawing.Color.White;
@@ -180,6 +181,9 @@ namespace ChinaBookRent
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
+
+            string sCurrentDir = System.AppDomain.CurrentDomain.BaseDirectory;
+            sDataBaseStr = "Data Source=" + sCurrentDir + "ChinaBookRent.db;Pooling=true;FailIfMissing=false";
             // 
             // lableWelcome
             // 

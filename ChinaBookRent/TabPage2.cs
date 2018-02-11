@@ -177,7 +177,7 @@ namespace ChinaBookRent
 
         private void Btn_startOutBook_Click(object sender, System.EventArgs e)
         {
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             string sql_insert = string.Format("insert into RentBookInfo values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}')",
                         TextBox_bookISBN.Text, TextBox_personCardNum.Text, TextBox_bookPublisher.Text, TextBox_bookValue.Text, DataPic_bookOutDate.Text, DataPic_bookBackDate.Text, TextBox_bookName.Text);
@@ -193,7 +193,7 @@ namespace ChinaBookRent
 
         private void Btn_CheckBook_Click(object sender, System.EventArgs e)
         {
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
             int iCount = 0;
