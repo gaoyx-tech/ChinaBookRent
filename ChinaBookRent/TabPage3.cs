@@ -11,7 +11,7 @@ namespace ChinaBookRent
         private TextBox textBox_backBookISBN;
         private TextBox textBox_backPersonCardNum;
         //
-        private Button btn_startBackBook;
+        //private Button btn_startBackBook;
 
         private void initTabPage3()
         {
@@ -44,29 +44,29 @@ namespace ChinaBookRent
 
             //
             //
-            btn_startBackBook = new Button();
-            btn_startBackBook.Location = new Point(50 + label_backPersonCardNum.Size.Width + 20, 170);
-            btn_startBackBook.AutoSize = true;
-            btn_startBackBook.Text = "还书";
-            btn_startBackBook.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.tabPage3.Controls.Add(btn_startBackBook);
-            btn_startBackBook.Click += Btn_startBackBook_Click;
+            //btn_startBackBook = new Button();
+            //btn_startBackBook.Location = new Point(50 + label_backPersonCardNum.Size.Width + 20, 170);
+            //btn_startBackBook.AutoSize = true;
+            //btn_startBackBook.Text = "还书";
+            //btn_startBackBook.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            //this.tabPage3.Controls.Add(btn_startBackBook);
+            //btn_startBackBook.Click += Btn_startBackBook_Click;
         }
 
-        private void Btn_startBackBook_Click(object sender, System.EventArgs e)
-        {
-            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
-            conn.Open();
-            //
-            string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", textBox_backBookISBN.Text, textBox_backPersonCardNum.Text);
-            System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
-            cmd.CommandText = sql_del;
-            cmd.Connection = conn;
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("还书成功", "提示");
-            //
-            cmd.Dispose();
-            conn.Close();
-        }
+        //private void Btn_startBackBook_Click(object sender, System.EventArgs e)
+        //{
+        //    System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+        //    conn.Open();
+        //    //
+        //    string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", textBox_backBookISBN.Text, textBox_backPersonCardNum.Text);
+        //    System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+        //    cmd.CommandText = sql_del;
+        //    cmd.Connection = conn;
+        //    cmd.ExecuteNonQuery();
+        //    MessageBox.Show("还书成功", "提示");
+        //    //
+        //    cmd.Dispose();
+        //    conn.Close();
+        //}
     }
 }

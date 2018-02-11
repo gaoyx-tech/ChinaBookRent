@@ -12,6 +12,7 @@ namespace ChinaBookRent
         private Button btn_startFindBooks;
         private ListView listview_books;
         private Label label_personDetail;
+        private Button btn_startBackBook;
 
         //
         private void initTabPage4()
@@ -79,6 +80,38 @@ namespace ChinaBookRent
             label_personDetail.AutoSize = true;
             label_personDetail.Size = new Size(100, 130);
             this.tabPage4.Controls.Add(label_personDetail);
+            //
+            //
+            btn_startBackBook = new Button();
+            btn_startBackBook.Location = new Point(1100, 340);
+            btn_startBackBook.AutoSize = true;
+            btn_startBackBook.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            btn_startBackBook.Text = "开始还书";
+            this.tabPage4.Controls.Add(btn_startBackBook);
+            btn_startBackBook.Click += Btn_startBackBook_Click;
+        }
+
+        private void Btn_startBackBook_Click(object sender, System.EventArgs e)
+        {
+            if (listview_books.SelectedItems.Count > 0)
+            {
+                string bookISBN = listview_books.SelectedItems[0].SubItems[1].Text;
+                string personCardNo = listview_books.SelectedItems[0].SubItems[2].Text;
+                //
+                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+                conn.Open();
+                //
+                string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", bookISBN, personCardNo);
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = sql_del;
+                cmd.Connection = conn;
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("还书成功", "提示");
+                //
+                btn_startFindBooks.PerformClick();
+                cmd.Dispose();
+                conn.Close();
+            }
         }
 
         private void Listview_books_Click(object sender, System.EventArgs e)
@@ -161,7 +194,8 @@ namespace ChinaBookRent
                     lvi.SubItems.Add(bookBackDate);
                     lvi.SubItems.Add(bookValue);
                     lvi.SubItems.Add(publisher);
-                    if (isOver) {
+                    if (isOver)
+                    {
                         lvi.BackColor = Color.Red;//过期标红色
                     }
                     listview_books.Items.Add(lvi);
@@ -175,8 +209,8 @@ namespace ChinaBookRent
         //比对时间
         public bool compareIsOverDue(string date)
         {
-            string s1 = date.Replace('年','-');
-            string s2 = s1.Replace('月','-');
+            string s1 = date.Replace('年', '-');
+            string s2 = s1.Replace('月', '-');
             string s3 = s2.Remove(s2.Length - 1);
             //获取当前日期
             int compare = System.DateTime.Compare(System.DateTime.Parse(s3), System.DateTime.Now);//如果小于0则是t1小于t2，说明过期了

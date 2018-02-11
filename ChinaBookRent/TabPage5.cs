@@ -12,6 +12,8 @@ namespace ChinaBookRent
         //
         private ListView listview_personInfos;
         private ListView listview_personOfBooks;
+        //
+        private Button btn_startReturnBook;
 
         private void initTabPage5()
         {
@@ -71,9 +73,44 @@ namespace ChinaBookRent
             listview_personOfBooks.FullRowSelect = true;
             listview_personOfBooks.Columns.Add("书名", 100, HorizontalAlignment.Center);
             listview_personOfBooks.Columns.Add("ISBN号", 144, HorizontalAlignment.Center);
-            listview_personOfBooks.Columns.Add("价格", 50, HorizontalAlignment.Center);
+            listview_personOfBooks.Columns.Add("价格", 90, HorizontalAlignment.Center);
             listview_personOfBooks.Columns.Add("归还日期", 130, HorizontalAlignment.Center);
+            listview_personOfBooks.Columns.Add("人员卡号", 130, HorizontalAlignment.Center);
             this.tabPage5.Controls.Add(listview_personOfBooks);
+            //
+            //
+            btn_startReturnBook = new Button();
+            btn_startReturnBook.Location = new Point(760, 400);
+            btn_startReturnBook.Text = "开始还书";
+            btn_startReturnBook.AutoSize = true;
+            btn_startReturnBook.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabPage5.Controls.Add(btn_startReturnBook);
+            //
+            btn_startReturnBook.Click += Btn_startReturnBook_Click;
+        }
+
+        private void Btn_startReturnBook_Click(object sender, System.EventArgs e)
+        {
+            if(listview_personOfBooks.SelectedItems.Count > 0 )
+            {
+                string bookISBN = listview_personOfBooks.SelectedItems[0].SubItems[1].Text;
+                string personCardNo = listview_personOfBooks.SelectedItems[0].SubItems[4].Text;
+                //
+                System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
+                conn.Open();
+                //
+                string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", bookISBN, personCardNo);
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = sql_del;
+                cmd.Connection = conn;
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("还书成功", "提示");
+                //
+                Listview_personInfos_Click(null, null);
+                cmd.Dispose();
+                conn.Close();
+            }
+
         }
 
         private void Listview_personInfos_Click(object sender, System.EventArgs e)
@@ -110,6 +147,7 @@ namespace ChinaBookRent
                         lvi.SubItems.Add(bookISBN);
                         lvi.SubItems.Add(bookValue);
                         lvi.SubItems.Add(bookBack);
+                        lvi.SubItems.Add(sCardNo);
                         if (isOver)
                         {
                             lvi.BackColor = Color.Red;
