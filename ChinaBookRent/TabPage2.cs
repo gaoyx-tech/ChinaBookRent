@@ -27,6 +27,11 @@ namespace ChinaBookRent
 
         //
         private System.Windows.Forms.Button btn_startOutBook;
+        //
+        private System.Windows.Forms.Label lb_checkPersonCanRent;
+        private System.Windows.Forms.TextBox tb_checkPersonCanRent;
+        private System.Windows.Forms.Button btn_checkPersonCanRent;
+
 
         private void initTabPage2()
         {
@@ -35,21 +40,46 @@ namespace ChinaBookRent
             this.label_CheckBook.Location = new System.Drawing.Point(30, 30);
             this.label_CheckBook.Text = "请检查此书是否可借出（请输入书籍ISBN号码）";
             this.label_CheckBook.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_CheckBook.Size = new System.Drawing.Size(label_CheckBook.Size.Width + 250, label_CheckBook.Height);
+            this.label_CheckBook.AutoSize = true;
             this.tabPage2.Controls.Add(label_CheckBook);
             //
             this.TextBox_CheckBookISBN = new System.Windows.Forms.TextBox();
-            this.TextBox_CheckBookISBN.Location = new System.Drawing.Point(label_CheckBook.Width + 30, 25);
-            this.TextBox_CheckBookISBN.Size = new System.Drawing.Size(TextBox_CheckBookISBN.Size.Width + 130, TextBox_CheckBookISBN.Size.Height);
+            this.TextBox_CheckBookISBN.Location = new System.Drawing.Point(label_CheckBook.Width + 35, 25);
+            this.TextBox_CheckBookISBN.Size = new System.Drawing.Size(TextBox_CheckBookISBN.Size.Width + 50, TextBox_CheckBookISBN.Size.Height);
             this.tabPage2.Controls.Add(TextBox_CheckBookISBN);
             //
             this.btn_CheckBook = new System.Windows.Forms.Button();
-            this.btn_CheckBook.Location = new System.Drawing.Point(label_CheckBook.Width + 30, TextBox_CheckBookISBN.Height + 35);
+            this.btn_CheckBook.Location = new System.Drawing.Point(label_CheckBook.Width + 35, TextBox_CheckBookISBN.Height + 35);
             this.btn_CheckBook.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btn_CheckBook.AutoSize = true;
             this.btn_CheckBook.Text = "开始检查";
             this.btn_CheckBook.Click += Btn_CheckBook_Click;
             this.tabPage2.Controls.Add(btn_CheckBook);
+
+            //
+            //检查此人是否再可借书
+            lb_checkPersonCanRent = new System.Windows.Forms.Label();
+            lb_checkPersonCanRent.Location = new System.Drawing.Point(label_CheckBook.Width + TextBox_CheckBookISBN.Width + 60, 30);
+            lb_checkPersonCanRent.AutoSize = true;
+            lb_checkPersonCanRent.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            lb_checkPersonCanRent.Text = "检查此读者是否再可借书（请输入读者卡号）";
+            this.tabPage2.Controls.Add(lb_checkPersonCanRent);
+            //
+            tb_checkPersonCanRent = new System.Windows.Forms.TextBox();
+            tb_checkPersonCanRent.Size = new System.Drawing.Size(tb_checkPersonCanRent.Size.Width + 50, tb_checkPersonCanRent.Size.Height);
+            tb_checkPersonCanRent.Location = new System.Drawing.Point(30 + label_CheckBook.Width + TextBox_CheckBookISBN.Width + 35 + lb_checkPersonCanRent.Width, 25);
+            this.tabPage2.Controls.Add(tb_checkPersonCanRent);
+            //
+            btn_checkPersonCanRent = new System.Windows.Forms.Button();
+            btn_checkPersonCanRent.Location = new System.Drawing.Point(30 + label_CheckBook.Width + TextBox_CheckBookISBN.Width + 35 + lb_checkPersonCanRent.Width, tb_checkPersonCanRent.Height + 35);
+            btn_checkPersonCanRent.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            btn_checkPersonCanRent.Text = "检查读者";
+            btn_checkPersonCanRent.AutoSize = true;
+            this.tabPage2.Controls.Add(btn_checkPersonCanRent);
+            btn_checkPersonCanRent.Click += Btn_checkPersonCanRent_Click;
+
+            //-----------------------------------------------------------------------------------------------------------------------------------
+
             //分割线
             label_Cut = new System.Windows.Forms.Label();
             label_Cut.AutoSize = false;
@@ -166,6 +196,59 @@ namespace ChinaBookRent
             btn_startOutBook.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(btn_startOutBook);
             btn_startOutBook.Click += Btn_startOutBook_Click;
+        }
+
+        private void Btn_checkPersonCanRent_Click(object sender, System.EventArgs e)
+        {
+            string personCardNo = tb_checkPersonCanRent.Text;
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
+            conn.Open();
+            //
+            string sql = string.Format("select bookValue from RentBookInfo where personCardNum = {0}", tb_checkPersonCanRent.Text);
+            System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+            cmd.CommandText = sql;
+            cmd.Connection = conn;
+            System.Data.SQLite.SQLiteDataReader reader = cmd.ExecuteReader();
+            //
+            int iCount = 0;
+            double value = 0.0;
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    value += System.Double.Parse(reader.GetString(0));
+                    ++iCount;
+                }
+            }
+
+            if (iCount == 0)
+            {
+                System.Windows.Forms.MessageBox.Show("该读者不存在！请先入库！", "提示");
+                return;
+            }
+
+            if (value >= 100 && value < 200)
+            {
+                string currentval = string.Format("读者当前已经借出总价大于100元的书,但还小于200元({0}元)，请注意", value);
+                System.Windows.Forms.MessageBox.Show(currentval, "提示");
+                return;
+            }
+            else if (value >= 200)
+            {
+                System.Windows.Forms.MessageBox.Show("读者当前已经借出总价大于200元的书，不可再借！", "提示");
+                return;
+            }
+            else if (iCount >= 3)
+            {
+                System.Windows.Forms.MessageBox.Show("读者当前已经借出3本书，不可再借！", "提示");
+                return;
+            }
+            else
+            {
+                string currentval = string.Format("读者当前可以借书！（{0}元）", value);
+                System.Windows.Forms.MessageBox.Show(currentval, "提示");
+                return;
+            }
         }
 
         private void DataPic_bookOutDate_ValueChanged(object sender, System.EventArgs e)

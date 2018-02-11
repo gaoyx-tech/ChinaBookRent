@@ -1,0 +1,17 @@
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\ChinaBookRent.exe.config
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\ChinaBookRent.exe
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\ChinaBookRent.pdb
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\EntityFramework.dll
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\EntityFramework.SqlServer.dll
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\System.Data.SQLite.dll
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\System.Data.SQLite.EF6.dll
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\System.Data.SQLite.Linq.dll
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\EntityFramework.xml
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\EntityFramework.SqlServer.xml
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\System.Data.SQLite.xml
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\System.Data.SQLite.dll.config
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.Form1.resources
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.Properties.Resources.resources
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csproj.GenerateResource.Cache
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.exe
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.pdb
