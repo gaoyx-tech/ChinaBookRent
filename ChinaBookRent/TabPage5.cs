@@ -123,7 +123,7 @@ namespace ChinaBookRent
                 cmd.CommandText = sql_del;
                 cmd.Connection = conn;
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("还书成功", "提示");
+                MessageBox.Show(sNote, "提示");
                 //
                 Listview_personInfos_Click(null, null);
                 cmd.Dispose();

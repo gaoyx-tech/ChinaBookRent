@@ -105,11 +105,11 @@ namespace ChinaBookRent
                 System.TimeSpan timeCut = timeNow - timeBack;
                 int dayCut = timeCut.Days;
                 string sNote = "还书成功";
-                if (dayCut <= 7)
+                if (dayCut <= 7 && dayCut > 0)
                 {
                     sNote = string.Format("该图书已归还，但已过期{0}天，需缴纳{1}元罚款！", dayCut, dayCut);
                 }
-                else
+                else if (dayCut > 7)
                 {
                     sNote = "该图书已过期大于7天，按规定图书已被购买，请支付书款！";
                 }
