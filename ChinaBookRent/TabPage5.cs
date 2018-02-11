@@ -97,6 +97,23 @@ namespace ChinaBookRent
             {
                 string bookISBN = listview_personOfBooks.SelectedItems[0].SubItems[1].Text;
                 string personCardNo = listview_personOfBooks.SelectedItems[0].SubItems[4].Text;
+                string backDate = listview_personOfBooks.SelectedItems[0].SubItems[3].Text;
+                //
+                //
+                //算出时间差
+                System.DateTime timeNow = System.DateTime.Now;
+                System.DateTime timeBack = System.DateTime.Parse(backDate);
+                System.TimeSpan timeCut = timeNow - timeBack;
+                int dayCut = timeCut.Days;
+                string sNote = "还书成功";
+                if (dayCut <= 7 && dayCut > 0)
+                {
+                    sNote = string.Format("该图书已归还，但已过期{0}天，需缴纳{1}元罚款！", dayCut, dayCut);
+                }
+                else if (dayCut > 7)
+                {
+                    sNote = "该图书已过期大于7天，按规定图书已被购买，请支付书款！";
+                }
                 //
                 System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
                 conn.Open();

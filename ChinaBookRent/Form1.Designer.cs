@@ -265,7 +265,7 @@ namespace ChinaBookRent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1920, 1055);
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.lableWelcome);
             this.Name = "Form1";

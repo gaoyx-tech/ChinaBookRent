@@ -97,17 +97,33 @@ namespace ChinaBookRent
             {
                 string bookISBN = listview_books.SelectedItems[0].SubItems[1].Text;
                 string personCardNo = listview_books.SelectedItems[0].SubItems[2].Text;
-                //
+                string backDate = listview_books.SelectedItems[0].SubItems[4].Text;
+
+                //算出时间差
+                System.DateTime timeNow = System.DateTime.Now;
+                System.DateTime timeBack = System.DateTime.Parse(backDate);
+                System.TimeSpan timeCut = timeNow - timeBack;
+                int dayCut = timeCut.Days;
+                string sNote = "还书成功";
+                if (dayCut <= 7)
+                {
+                    sNote = string.Format("该图书已归还，但已过期{0}天，需缴纳{1}元罚款！", dayCut, dayCut);
+                }
+                else
+                {
+                    sNote = "该图书已过期大于7天，按规定图书已被购买，请支付书款！";
+                }
+
                 System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
                 conn.Open();
-                //
+
                 string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", bookISBN, personCardNo);
                 System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
                 cmd.CommandText = sql_del;
                 cmd.Connection = conn;
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("还书成功", "提示");
-                //
+                MessageBox.Show(sNote, "提示");
+
                 btn_startFindBooks.PerformClick();
                 cmd.Dispose();
                 conn.Close();
