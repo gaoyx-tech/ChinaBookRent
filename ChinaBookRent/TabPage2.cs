@@ -1,14 +1,74 @@
 ﻿
 using System.IO;
+using Newtonsoft.Json;
 
 namespace ChinaBookRent
 {
     partial class Form1
     {
+        class BookRating
+        {
+            public int max;
+            public int numRaters;
+            public string average;
+            public int min;
+        }
+
+        class BookImage
+        {
+            public string small;
+            public string medium;
+            public string large;
+        }
+        class BookTags
+        {
+            public int count;
+            public string name;
+            public string title;
+        }
+        class BookSeries
+        {
+            public string id;
+            public string title;
+        }
+        class BookInfo
+        {
+            public BookRating rating;
+            public string subtitle;
+            public string[] author;
+            public BookTags[] tags;
+            public string origin_title;
+            public string image;
+            public string[] translator;
+            public string catalog;
+            public string pages;
+            public string alt;
+            public string id;
+            public string binding;
+            public string isbn10;
+            public string isbn13;
+            public string url;
+            public string alt_title;
+            public string author_intro;
+            public string pubdate;
+            public BookImage images;
+            public string publisher;
+            public string title;
+            public string summary;
+            public string price;
+            public BookSeries series;
+            public string ebook_url;
+            public string ebook_price;
+        }
+
         private System.Windows.Forms.Label label_CheckBook;
         private System.Windows.Forms.TextBox TextBox_CheckBookISBN;
         private System.Windows.Forms.Button btn_CheckBook;
         private System.Windows.Forms.Label label_Cut;
+        //
+        private System.Windows.Forms.PictureBox pic_cover;
+        private System.Windows.Forms.Label lb_intro;
+        private System.Windows.Forms.Label lb_author;
         //
         private System.Windows.Forms.Label label_bookName;
         private System.Windows.Forms.Label label_bookISBN;
@@ -100,8 +160,30 @@ namespace ChinaBookRent
             //
             this.TextBox_bookName = new System.Windows.Forms.TextBox();
             this.TextBox_bookName.Location = new System.Drawing.Point(180, 145);
+            TextBox_bookName.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.TextBox_bookName.Size = new System.Drawing.Size(TextBox_bookName.Size.Width + 130, TextBox_bookName.Size.Height);
             this.tabPage2.Controls.Add(TextBox_bookName);
+
+            //书籍封面
+            pic_cover = new System.Windows.Forms.PictureBox();
+            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 480, 145);
+            pic_cover.Size = new System.Drawing.Size(120, 180);
+            this.tabPage2.Controls.Add(pic_cover);
+
+            //
+            //
+            lb_intro = new System.Windows.Forms.Label();
+            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 410, 360);
+            lb_intro.Size = new System.Drawing.Size(400, 300);
+            lb_intro.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabPage2.Controls.Add(lb_intro);
+
+            //
+            lb_author = new System.Windows.Forms.Label();
+            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 410, 335);
+            lb_author.AutoSize = true;
+            lb_author.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabPage2.Controls.Add(lb_author);
 
             //书籍ISBN
             label_bookISBN = new System.Windows.Forms.Label();
@@ -208,12 +290,35 @@ namespace ChinaBookRent
                 string sReq = string.Format("https://api.douban.com/v2/book/isbn/:{0}", sText);
                 System.Net.WebRequest req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(sReq);
                 req.Method = "GET";
-                using (System.Net.WebResponse wr = req.GetResponse())
+                try
                 {
-                    //在这里对接收到的页面内容进行处理
-                    StreamReader streamReader = new StreamReader(wr.GetResponseStream());
-                    string responseContent = streamReader.ReadToEnd();
-                    streamReader.Close();
+                    using (System.Net.WebResponse wr = req.GetResponse())
+                    {
+                        //在这里对接收到的页面内容进行处理
+                        StreamReader streamReader = new StreamReader(wr.GetResponseStream());
+                        string responseContent = streamReader.ReadToEnd();
+                        BookInfo bookInfo = JavaScriptConvert.DeserializeObject<BookInfo>(responseContent);
+                        //网络数据插入到控件中
+                        TextBox_bookName.Text = bookInfo.title;
+                        TextBox_bookPublisher.Text = bookInfo.publisher;
+                        TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY","").Trim();
+                        System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.images.medium).GetResponse().GetResponseStream());
+                        pic_cover.Image = imageNet;
+                        //
+                        string sIntro = string.Format("书籍简介：{0}", bookInfo.summary);
+                        lb_intro.Text = sIntro;
+                        string sAuthors = "作者：";
+                        foreach (string str in bookInfo.author)
+                        {
+                            sAuthors += str + " ";
+                        }
+                        lb_author.Text = sAuthors;
+                        streamReader.Close();
+                    }
+                }
+                catch (System.SystemException e1)
+                {
+                    System.Windows.Forms.MessageBox.Show("无法获取图书信息，请自行输入，哈哈哈！");
                 }
             }
         }
