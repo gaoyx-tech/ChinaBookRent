@@ -15,3 +15,4 @@ C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.Properties
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csproj.GenerateResource.Cache
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.exe
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.pdb
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csprojResolveAssemblyReference.cache

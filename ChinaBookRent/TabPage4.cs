@@ -34,18 +34,18 @@ namespace ChinaBookRent
             combo_type.Items.Add("按出版社查询");
             this.combo_type.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             combo_type.Size = new Size(combo_type.Width + 60, combo_type.Height);
-            combo_type.Location = new Point(200, 60);
+            combo_type.Location = new Point(240, 60);
             this.tabPage4.Controls.Add(combo_type);
             combo_type.SelectedIndex = 0;
             //
             tb_condition = new TextBox();
-            tb_condition.Location = new Point(200 + combo_type.Width + 20, 60);
+            tb_condition.Location = new Point(200 + combo_type.Width + 60, 60);
             this.tb_condition.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             tb_condition.Size = new Size(tb_condition.Size.Width + 100, tb_condition.Size.Height);
             this.tabPage4.Controls.Add(tb_condition);
             //
             btn_startFindBooks = new Button();
-            btn_startFindBooks.Location = new Point(200 + combo_type.Width + 95, 104);
+            btn_startFindBooks.Location = new Point(200 + combo_type.Width + 110, 104);
             btn_startFindBooks.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             btn_startFindBooks.AutoSize = true;
             btn_startFindBooks.Text = "开始查询";

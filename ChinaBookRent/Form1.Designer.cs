@@ -49,7 +49,7 @@ namespace ChinaBookRent
             this.TextBoxPersonName.Focus();
             this.TextBoxPersonName.Enabled = true;
             this.tabPage1.Controls.Add(TextBoxPersonName);
-
+            
             this.labelPersonCardNum = new System.Windows.Forms.Label();
             this.labelPersonCardNum.AutoSize = true;
             this.labelPersonCardNum.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -70,8 +70,8 @@ namespace ChinaBookRent
             this.tabPage1.Controls.Add(labelPersonPersonNum);
             //
             this.TextBoxPersonNum = new System.Windows.Forms.TextBox();
-            this.TextBoxPersonNum.Location = new System.Drawing.Point(230, 195);
-            this.TextBoxPersonNum.Size = new System.Drawing.Size(this.TextBoxPersonName.Size.Width + 50, this.TextBoxPersonName.Size.Height);
+            this.TextBoxPersonNum.Location = new System.Drawing.Point(280, 195);
+            this.TextBoxPersonNum.Size = new System.Drawing.Size(this.TextBoxPersonName.Size.Width + 150, this.TextBoxPersonName.Size.Height);
             this.tabPage1.Controls.Add(TextBoxPersonNum);
 
             this.labelPersonMobile = new System.Windows.Forms.Label();

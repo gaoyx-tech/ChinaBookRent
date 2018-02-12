@@ -1,4 +1,5 @@
 ﻿
+using System.IO;
 
 namespace ChinaBookRent
 {
@@ -114,7 +115,8 @@ namespace ChinaBookRent
             this.TextBox_bookISBN.Location = new System.Drawing.Point(180, 215);
             this.TextBox_bookISBN.Size = new System.Drawing.Size(TextBox_bookISBN.Size.Width + 130, TextBox_bookISBN.Size.Height);
             this.tabPage2.Controls.Add(TextBox_bookISBN);
-
+            //输入ISBN后请求其他图书数据
+            TextBox_bookISBN.TextChanged += TextBox_bookISBN_TextChanged_ForNet;
 
             //书籍出版社
             label_bookPublisher = new System.Windows.Forms.Label();
@@ -171,7 +173,7 @@ namespace ChinaBookRent
             //
             //
             System.DateTime dt = DataPic_bookOutDate.Value;
-            System.DateTime dtBack = dt + new System.TimeSpan(29, 0, 0, 0);
+            System.DateTime dtBack = dt + new System.TimeSpan(30, 0, 0, 0);
             DataPic_bookBackDate.Value = dtBack;
 
             //借书人卡号
@@ -198,13 +200,30 @@ namespace ChinaBookRent
             btn_startOutBook.Click += Btn_startOutBook_Click;
         }
 
+        private void TextBox_bookISBN_TextChanged_ForNet(object sender, System.EventArgs e)
+        {
+            string sText = TextBox_bookISBN.Text;
+            if (sText.Length == 13)
+            {
+                string sReq = string.Format("https://api.douban.com/v2/book/isbn/:{0}", sText);
+                System.Net.WebRequest req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(sReq);
+                req.Method = "GET";
+                using (System.Net.WebResponse wr = req.GetResponse())
+                {
+                    //在这里对接收到的页面内容进行处理
+                    StreamReader streamReader = new StreamReader(wr.GetResponseStream());
+                    string responseContent = streamReader.ReadToEnd();
+                    streamReader.Close();
+                }
+            }
+        }
+
         private void Btn_checkPersonCanRent_Click(object sender, System.EventArgs e)
         {
-            string personCardNo = tb_checkPersonCanRent.Text;
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
-            string sql = string.Format("select bookValue from RentBookInfo where personCardNum = {0}", tb_checkPersonCanRent.Text);
+            string sql = string.Format("select bookValue from RentBookInfo where personCardNum = '{0}'", tb_checkPersonCanRent.Text);
             System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
             cmd.CommandText = sql;
             cmd.Connection = conn;
@@ -221,13 +240,7 @@ namespace ChinaBookRent
                 }
             }
 
-            if (iCount == 0)
-            {
-                System.Windows.Forms.MessageBox.Show("该读者不存在！请先入库！", "提示");
-                return;
-            }
-
-            if (value >= 100 && value < 200)
+            if (value >= 100 && value < 200 && iCount < 3)
             {
                 string currentval = string.Format("读者当前已经借出总价大于100元的书,但还小于200元({0}元)，请注意", value);
                 System.Windows.Forms.MessageBox.Show(currentval, "提示");
