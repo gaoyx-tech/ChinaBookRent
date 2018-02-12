@@ -125,8 +125,12 @@ namespace ChinaBookRent
                 MessageBox.Show(sNote, "提示");
 
                 btn_startFindBooks.PerformClick();
+                //
                 cmd.Dispose();
                 conn.Close();
+                conn.Dispose();
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
             }
         }
 
@@ -160,8 +164,13 @@ namespace ChinaBookRent
                 string mobile = reader.GetString(3);
                 label_personDetail.Text = "借书人详细信息：" + "\r\n" + "\r\n" + "姓名：" + personName + "\r\n" + "\r\n" + "身份证号：" + personNum + "\r\n" + "\r\n" + "手机号：" + mobile;
             }
+            //
+            reader.Close();
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
 
         //开始查询
@@ -218,8 +227,14 @@ namespace ChinaBookRent
                 }
                 this.listview_books.EndUpdate();
             }
+            //
+            reader.Close();
+            
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
 
         //比对时间

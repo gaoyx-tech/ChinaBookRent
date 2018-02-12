@@ -126,8 +126,12 @@ namespace ChinaBookRent
                 MessageBox.Show(sNote, "提示");
                 //
                 Listview_personInfos_Click(null, null);
+                //
                 cmd.Dispose();
                 conn.Close();
+                conn.Dispose();
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
             }
 
         }
@@ -176,6 +180,14 @@ namespace ChinaBookRent
                     this.listview_personOfBooks.EndUpdate();
 
                 }
+                //
+                reader.Close();
+                cmd.Dispose();
+                conn.Close();
+                conn.Dispose();
+                System.GC.Collect();
+                System.GC.WaitForPendingFinalizers();
+
             }
 
         }
@@ -214,8 +226,13 @@ namespace ChinaBookRent
                 }
                 this.listview_personInfos.EndUpdate();
             }
+            //
+            reader.Close();
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace ChinaBookRent
             this.TextBoxPersonName.Focus();
             this.TextBoxPersonName.Enabled = true;
             this.tabPage1.Controls.Add(TextBoxPersonName);
-            
+
             this.labelPersonCardNum = new System.Windows.Forms.Label();
             this.labelPersonCardNum.AutoSize = true;
             this.labelPersonCardNum.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -149,6 +149,9 @@ namespace ChinaBookRent
             //
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
 
         private void Btn_createPerson_Click(object sender, System.EventArgs e)
@@ -166,9 +169,14 @@ namespace ChinaBookRent
             //
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
 
         string sDataBaseStr = "";
+        string sCurrentDir = "";
+
         private void InitializeComponent()
         {
             this.BackColor = System.Drawing.Color.White;
@@ -179,12 +187,13 @@ namespace ChinaBookRent
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            btn_DataToServer = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
 
-            string sCurrentDir = System.AppDomain.CurrentDomain.BaseDirectory;
+            sCurrentDir = System.AppDomain.CurrentDomain.BaseDirectory;
             sDataBaseStr = "Data Source=" + sCurrentDir + "ChinaBookRent.db;Pooling=true;FailIfMissing=false";
-            // 
+
             // lableWelcome
             // 
             this.lableWelcome.AutoSize = true;
@@ -192,6 +201,13 @@ namespace ChinaBookRent
             this.lableWelcome.Location = new System.Drawing.Point(20, 20);
             this.lableWelcome.Size = new System.Drawing.Size(432, 27);
             this.lableWelcome.Text = "欢迎使用本借阅系统（中国书店西黄城根南街）";
+
+            btn_DataToServer.Location = new System.Drawing.Point(1200, 20);
+            btn_DataToServer.Size = new System.Drawing.Size(200, 30);
+            btn_DataToServer.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            btn_DataToServer.Text = "数 据 同 步";
+            this.Controls.Add(btn_DataToServer);
+            btn_DataToServer.Click += Btn_DataToServer_Click;
             // 
             // tabControl1
             // 
@@ -273,6 +289,32 @@ namespace ChinaBookRent
 
         }
 
+        private void Btn_DataToServer_Click(object sender, System.EventArgs e)
+        {
+            sendMail();
+            System.Windows.Forms.MessageBox.Show("数据同步完成！", "提示");
+        }
+
+        public void sendMail()
+        {
+            string mailFrom = "975341137@qq.com";
+            string mailTo = "gaoyx@chineseall.com";
+            System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage(mailFrom, mailTo);
+            msg.Subject = "china book rent";
+            msg.Body = "Please Check attachment.";
+            //
+            System.Net.Mail.Attachment dataAttachment = new System.Net.Mail.Attachment(sCurrentDir + "ChinaBookRent.db");
+            msg.Attachments.Add(dataAttachment); //附件需要用Add的方式增加到邮件中
+            //
+            System.Net.Mail.SmtpClient sc = new System.Net.Mail.SmtpClient("smtp.qq.com");
+            sc.Port = 587;  //需要显式的设置端口号，否则也不能发送成功
+            sc.UseDefaultCredentials = false;
+            sc.EnableSsl = true;
+            sc.Credentials = new System.Net.NetworkCredential(mailFrom, "podpctjgliovbfdb");
+            sc.Send(msg);
+            dataAttachment.Dispose();//附件发送完成后，需要释放，否则相关文件会是用户锁定状态
+        }
+
         private System.Windows.Forms.Label lableWelcome;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
@@ -280,6 +322,7 @@ namespace ChinaBookRent
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Button btn_DataToServer;
     }
 }
 

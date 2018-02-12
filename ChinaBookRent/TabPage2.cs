@@ -350,6 +350,13 @@ namespace ChinaBookRent
                     ++iCount;
                 }
             }
+            //
+            reader.Close();
+            cmd.Dispose();
+            conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
 
             if (value >= 100 && value < 200 && iCount < 3)
             {
@@ -373,12 +380,14 @@ namespace ChinaBookRent
                 System.Windows.Forms.MessageBox.Show(currentval, "提示");
                 return;
             }
+
+
         }
 
         private void DataPic_bookOutDate_ValueChanged(object sender, System.EventArgs e)
         {
             System.DateTime dt = DataPic_bookOutDate.Value;
-            System.DateTime dtBack = dt + new System.TimeSpan(29, 0, 0, 0);
+            System.DateTime dtBack = dt + new System.TimeSpan(30, 0, 0, 0);
             DataPic_bookBackDate.Value = dtBack;
         }
 
@@ -394,8 +403,12 @@ namespace ChinaBookRent
             cmd.ExecuteNonQuery();
             System.Windows.Forms.MessageBox.Show("新建借书成功", "提示");
             //
+            //
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
 
         private void Btn_CheckBook_Click(object sender, System.EventArgs e)
@@ -419,8 +432,13 @@ namespace ChinaBookRent
             }
             if (iCount == 2) System.Windows.Forms.MessageBox.Show("此书借出已达到两本，不可借出", "提示");
             else System.Windows.Forms.MessageBox.Show("此书可借出", "提示");
+            //
+            reader.Close();
             cmd.Dispose();
             conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
         }
     }
 }
