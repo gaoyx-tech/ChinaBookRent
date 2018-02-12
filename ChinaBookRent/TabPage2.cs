@@ -155,32 +155,33 @@ namespace ChinaBookRent
             label_bookName.Text = "书籍名称";
             label_bookName.AutoSize = true;
             label_bookName.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            label_bookName.Location = new System.Drawing.Point(50, 150);
+            label_bookName.Location = new System.Drawing.Point(50, 220);
+
             this.tabPage2.Controls.Add(label_bookName);
             //
             this.TextBox_bookName = new System.Windows.Forms.TextBox();
-            this.TextBox_bookName.Location = new System.Drawing.Point(180, 145);
+            this.TextBox_bookName.Location = new System.Drawing.Point(180, 215);
             TextBox_bookName.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.TextBox_bookName.Size = new System.Drawing.Size(TextBox_bookName.Size.Width + 130, TextBox_bookName.Size.Height);
             this.tabPage2.Controls.Add(TextBox_bookName);
 
             //书籍封面
             pic_cover = new System.Windows.Forms.PictureBox();
-            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 480, 145);
+            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 530, 145);
             pic_cover.Size = new System.Drawing.Size(120, 180);
             this.tabPage2.Controls.Add(pic_cover);
 
             //
             //
             lb_intro = new System.Windows.Forms.Label();
-            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 410, 360);
+            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 460, 360);
             lb_intro.Size = new System.Drawing.Size(400, 300);
             lb_intro.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_intro);
 
             //
             lb_author = new System.Windows.Forms.Label();
-            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 410, 335);
+            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 460, 335);
             lb_author.AutoSize = true;
             lb_author.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_author);
@@ -190,11 +191,12 @@ namespace ChinaBookRent
             label_bookISBN.Text = "书籍ISBN号码";
             label_bookISBN.AutoSize = true;
             label_bookISBN.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            label_bookISBN.Location = new System.Drawing.Point(50, 220);
+            label_bookISBN.Location = new System.Drawing.Point(50, 150);
+
             this.tabPage2.Controls.Add(label_bookISBN);
             //
             this.TextBox_bookISBN = new System.Windows.Forms.TextBox();
-            this.TextBox_bookISBN.Location = new System.Drawing.Point(180, 215);
+            this.TextBox_bookISBN.Location = new System.Drawing.Point(180, 145);
             this.TextBox_bookISBN.Size = new System.Drawing.Size(TextBox_bookISBN.Size.Width + 130, TextBox_bookISBN.Size.Height);
             this.tabPage2.Controls.Add(TextBox_bookISBN);
             //输入ISBN后请求其他图书数据
@@ -210,6 +212,7 @@ namespace ChinaBookRent
             //
             this.TextBox_bookPublisher = new System.Windows.Forms.TextBox();
             this.TextBox_bookPublisher.Location = new System.Drawing.Point(180, 285);
+            TextBox_bookPublisher.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.TextBox_bookPublisher.Size = new System.Drawing.Size(TextBox_bookPublisher.Size.Width + 130, TextBox_bookPublisher.Size.Height);
             this.tabPage2.Controls.Add(TextBox_bookPublisher);
 
@@ -224,6 +227,7 @@ namespace ChinaBookRent
             this.TextBox_bookValue = new System.Windows.Forms.TextBox();
             this.TextBox_bookValue.Location = new System.Drawing.Point(180, 355);
             this.TextBox_bookValue.Size = new System.Drawing.Size(TextBox_bookValue.Size.Width + 130, TextBox_bookValue.Size.Height);
+            TextBox_bookValue.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(TextBox_bookValue);
 
             //书籍借出日期
@@ -301,18 +305,20 @@ namespace ChinaBookRent
                         //网络数据插入到控件中
                         TextBox_bookName.Text = bookInfo.title;
                         TextBox_bookPublisher.Text = bookInfo.publisher;
-                        TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY","").Trim();
+                        TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY","").Replace("¥", "").Trim();
+                        //
                         System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.images.medium).GetResponse().GetResponseStream());
                         pic_cover.Image = imageNet;
                         //
                         string sIntro = string.Format("书籍简介：{0}", bookInfo.summary);
                         lb_intro.Text = sIntro;
                         string sAuthors = "作者：";
-                        foreach (string str in bookInfo.author)
+                        foreach (string auth in bookInfo.author)
                         {
-                            sAuthors += str + " ";
+                            sAuthors += auth + " ";
                         }
                         lb_author.Text = sAuthors;
+
                         streamReader.Close();
                     }
                 }
