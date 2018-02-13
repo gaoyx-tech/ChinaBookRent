@@ -189,7 +189,7 @@ namespace ChinaBookRent
                         string bookBack = reader.GetString(5);
                         //
                         bool isOver = compareIsOverDue(bookBack);
-                        //
+                        //为了后面判断是否本书已还
                         m_listRenting.Add(bookISBN);
                         //
                         ListViewItem lvi = new ListViewItem();
@@ -202,6 +202,7 @@ namespace ChinaBookRent
                         {
                             lvi.BackColor = Color.Red;
                         }
+                        lvi.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
                         listview_personOfBooks.Items.Add(lvi);
                     }
                     this.listview_personOfBooks.EndUpdate();
@@ -232,13 +233,14 @@ namespace ChinaBookRent
                         lvi.SubItems.Add(bookISBN);
                         if (m_listRenting.Contains(bookISBN)) lvi.ForeColor = Color.Red;
                         else lvi.ForeColor = Color.Blue;
+                        lvi.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
                         //
                         listview_allBookOfPerson.Items.Add(lvi);
                     }
                     listview_allBookOfPerson.EndUpdate();
                 }
 
-
+                //
                 readerAll.Close();
                 cmdAll.Dispose();
                 conn.Close();

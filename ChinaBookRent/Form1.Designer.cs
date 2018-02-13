@@ -127,7 +127,7 @@ namespace ChinaBookRent
             this.label_delPersonNote.AutoSize = true;
             this.label_delPersonNote.Location = new System.Drawing.Point(470, 518);
             this.label_delPersonNote.Font = new System.Drawing.Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_delPersonNote.Text = "（注：删除借书人记录只需填写借书人卡号，其他非必须）";
+            this.label_delPersonNote.Text = "（注：删除借书人记录只需填写借书人姓名以及卡号，其他非必须）";
             this.tabPage1.Controls.Add(label_delPersonNote);
 
             //
@@ -137,10 +137,17 @@ namespace ChinaBookRent
 
         private void Btn_deletePerson_Click(object sender, System.EventArgs e)
         {
+            //
+            if (TextBoxPersonName.Text.Length == 0 || TextBoxPersonCardNum.Text.Length == 0)
+            {
+                System.Windows.Forms.MessageBox.Show("请先填写姓名或者卡号");
+                return;
+            }
+            //
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
-            //
-            string sql_del = string.Format("delete from RentPersonInfo where personCardNum = '{0}'", TextBoxPersonCardNum.Text);
+
+            string sql_del = string.Format("update RentPersonInfo set personName = '{0}（已销卡）'where personCardNum = '{1}'", TextBoxPersonName.Text, TextBoxPersonCardNum.Text);
             System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
             cmd.CommandText = sql_del;
             cmd.Connection = conn;
@@ -156,6 +163,17 @@ namespace ChinaBookRent
 
         private void Btn_createPerson_Click(object sender, System.EventArgs e)
         {
+            if (TextBoxPersonName.Text.Length == 0)
+            {
+                System.Windows.Forms.MessageBox.Show("请正确填写名字", "错误提示");
+                return;
+            }
+            if (TextBoxPersonCardNum.Text.Length != 8)
+            {
+                System.Windows.Forms.MessageBox.Show("请正确填写借阅卡号", "错误提示");
+                return;
+            }
+
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //

@@ -92,6 +92,8 @@ namespace ChinaBookRent
         private System.Windows.Forms.Label lb_checkPersonCanRent;
         private System.Windows.Forms.TextBox tb_checkPersonCanRent;
         private System.Windows.Forms.Button btn_checkPersonCanRent;
+        //
+        private System.Windows.Forms.Button btn_clearISBN;
 
 
         private void initTabPage2()
@@ -192,7 +194,6 @@ namespace ChinaBookRent
             label_bookISBN.AutoSize = true;
             label_bookISBN.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             label_bookISBN.Location = new System.Drawing.Point(50, 150);
-
             this.tabPage2.Controls.Add(label_bookISBN);
             //
             this.TextBox_bookISBN = new System.Windows.Forms.TextBox();
@@ -201,6 +202,15 @@ namespace ChinaBookRent
             this.tabPage2.Controls.Add(TextBox_bookISBN);
             //输入ISBN后请求其他图书数据
             TextBox_bookISBN.TextChanged += TextBox_bookISBN_TextChanged_ForNet;
+
+            //
+            btn_clearISBN = new System.Windows.Forms.Button();
+            btn_clearISBN.Location = new System.Drawing.Point(180 + TextBox_bookISBN.Width + 10, 145);
+            btn_clearISBN.AutoSize = true;
+            btn_clearISBN.Text = "重新输入ISBN号码";
+            btn_clearISBN.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabPage2.Controls.Add(btn_clearISBN);
+            btn_clearISBN.Click += Btn_clearISBN_Click;
 
             //书籍出版社
             label_bookPublisher = new System.Windows.Forms.Label();
@@ -286,6 +296,13 @@ namespace ChinaBookRent
             btn_startOutBook.Click += Btn_startOutBook_Click;
         }
 
+        private void Btn_clearISBN_Click(object sender, System.EventArgs e)
+        {
+            TextBox_bookISBN.Clear();
+            TextBox_bookISBN.Focus();
+            TextBox_bookISBN.TabIndex = 0;
+        }
+
         private void TextBox_bookISBN_TextChanged_ForNet(object sender, System.EventArgs e)
         {
             string sText = TextBox_bookISBN.Text;
@@ -305,7 +322,7 @@ namespace ChinaBookRent
                         //网络数据插入到控件中
                         TextBox_bookName.Text = bookInfo.title;
                         TextBox_bookPublisher.Text = bookInfo.publisher;
-                        TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY","").Replace("¥", "").Trim();
+                        TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY", "").Replace("¥", "").Trim();
                         //
                         System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.images.medium).GetResponse().GetResponseStream());
                         pic_cover.Image = imageNet;
@@ -399,6 +416,22 @@ namespace ChinaBookRent
 
         private void Btn_startOutBook_Click(object sender, System.EventArgs e)
         {
+            if (TextBox_bookName.Text.Length == 0)
+            {
+                System.Windows.Forms.MessageBox.Show("请正确填写书名", "错误提示");
+                return;
+            }
+            if (TextBox_bookValue.Text.Length == 0)
+            {
+                System.Windows.Forms.MessageBox.Show("请正确填写书籍价格", "错误提示");
+                return;
+            }
+            if (TextBox_personCardNum.Text.Length != 8)
+            {
+                System.Windows.Forms.MessageBox.Show("请正确填写借阅卡号", "错误提示");
+                return;
+            }
+
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             string sql_insert = string.Format("insert into RentBookInfo values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}')",
