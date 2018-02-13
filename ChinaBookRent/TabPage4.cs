@@ -59,6 +59,7 @@ namespace ChinaBookRent
             listview_books.View = View.Details;
             listview_books.GridLines = true;
             listview_books.FullRowSelect = true;
+            listview_books.HeaderStyle = ColumnHeaderStyle.Clickable;
             ColumnHeader ch = new ColumnHeader();
             ch.Text = "书籍名称";
             ch.TextAlign = HorizontalAlignment.Center;
@@ -183,14 +184,14 @@ namespace ChinaBookRent
             conn.Open();
             //
             int nSel = combo_type.SelectedIndex;
-            string sql_findbook = "select * from RentBookInfo";
+            string sql_findbook = "select * from RentBookInfo order by personCardNum";
             //
             if (nSel == 1)
-                sql_findbook = string.Format("select * from RentBookInfo where bookName like '%{0}%'", tb_condition.Text);
+                sql_findbook = string.Format("select * from RentBookInfo where bookName like '%{0}%' order by personCardNum", tb_condition.Text);
             else if (nSel == 2)
-                sql_findbook = string.Format("select * from RentBookInfo where bookISBN = '{0}'", tb_condition.Text);
+                sql_findbook = string.Format("select * from RentBookInfo where bookISBN = '{0}' order by personCardNum", tb_condition.Text);
             else if (nSel == 3)
-                sql_findbook = string.Format("select * from RentBookInfo where bookPublisher = '{0}'", tb_condition.Text);
+                sql_findbook = string.Format("select * from RentBookInfo where bookPublisher = '{0}' order by personCardNum", tb_condition.Text);
             //
             System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
             cmd.CommandText = sql_findbook;
