@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Collections;
 using System.Drawing;
 
 namespace ChinaBookRent
@@ -14,6 +15,11 @@ namespace ChinaBookRent
         private ListView listview_personOfBooks;
         //
         private Button btn_startReturnBook;
+        //
+        private Label lb_allBookOfPerson;
+        private ListView listview_allBookOfPerson;
+        //当前借出isbn集合
+        private ArrayList m_listRenting = new ArrayList();
 
         private void initTabPage5()
         {
@@ -69,7 +75,7 @@ namespace ChinaBookRent
             //
             listview_personOfBooks = new ListView();
             listview_personOfBooks.Location = new Point(760, 76);
-            listview_personOfBooks.Size = new Size(400, 300);
+            listview_personOfBooks.Size = new Size(400, 220);
             listview_personOfBooks.View = View.Details;
             listview_personOfBooks.GridLines = true;
             listview_personOfBooks.FullRowSelect = true;
@@ -82,13 +88,31 @@ namespace ChinaBookRent
             //
             //
             btn_startReturnBook = new Button();
-            btn_startReturnBook.Location = new Point(760, 400);
+            btn_startReturnBook.Location = new Point(760 + listview_personOfBooks.Width + 10, 230);
             btn_startReturnBook.Text = "开始还书";
             btn_startReturnBook.AutoSize = true;
             btn_startReturnBook.Font = new Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage5.Controls.Add(btn_startReturnBook);
             //
             btn_startReturnBook.Click += Btn_startReturnBook_Click;
+
+            //
+            lb_allBookOfPerson = new Label();
+            lb_allBookOfPerson.AutoSize = true;
+            lb_allBookOfPerson.Text = "借阅者所有图书（包括已还和未还，红色为未还，蓝色为已还）";
+            lb_allBookOfPerson.Font = new Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            lb_allBookOfPerson.Location = new Point(760, listview_personOfBooks.Height + 76 + 30);
+            this.tabPage5.Controls.Add(lb_allBookOfPerson);
+            //
+            listview_allBookOfPerson = new ListView();
+            listview_allBookOfPerson.Location = new Point(760, listview_personOfBooks.Height + 76 + 10 + lb_allBookOfPerson.Height + 24);
+            listview_allBookOfPerson.Size = new Size(400, 330);
+            listview_allBookOfPerson.FullRowSelect = true;
+            listview_allBookOfPerson.View = View.Details;
+            listview_allBookOfPerson.GridLines = true;
+            listview_allBookOfPerson.Columns.Add("书名", 200, HorizontalAlignment.Center);
+            listview_allBookOfPerson.Columns.Add("ISBN号", 144, HorizontalAlignment.Center);
+            this.tabPage5.Controls.Add(listview_allBookOfPerson);
         }
 
         private void Btn_startReturnBook_Click(object sender, System.EventArgs e)
@@ -143,6 +167,7 @@ namespace ChinaBookRent
             {
                 string sCardNo = listview_personInfos.SelectedItems[0].SubItems[2].Text;
                 //
+                m_listRenting.Clear();
                 //
                 listview_personOfBooks.Items.Clear();
                 System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
@@ -165,6 +190,8 @@ namespace ChinaBookRent
                         //
                         bool isOver = compareIsOverDue(bookBack);
                         //
+                        m_listRenting.Add(bookISBN);
+                        //
                         ListViewItem lvi = new ListViewItem();
                         lvi.Text = bookName;
                         lvi.SubItems.Add(bookISBN);
@@ -183,6 +210,37 @@ namespace ChinaBookRent
                 //
                 reader.Close();
                 cmd.Dispose();
+
+                //再查allbook表
+                listview_allBookOfPerson.Items.Clear();
+                string sqlAll = string.Format("select * from RentAllBookOfPerson where personCardNum = '{0}'", sCardNo);
+                //
+                System.Data.SQLite.SQLiteCommand cmdAll = new System.Data.SQLite.SQLiteCommand();
+                cmdAll.CommandText = sqlAll;
+                cmdAll.Connection = conn;
+                System.Data.SQLite.SQLiteDataReader readerAll = cmdAll.ExecuteReader();
+                if (readerAll.HasRows)
+                {
+                    listview_allBookOfPerson.BeginUpdate();
+                    while (readerAll.Read())
+                    {
+                        string bookName = readerAll.GetString(0);
+                        string bookISBN = readerAll.GetString(1);
+                        //
+                        ListViewItem lvi = new ListViewItem();
+                        lvi.Text = bookName;
+                        lvi.SubItems.Add(bookISBN);
+                        if (m_listRenting.Contains(bookISBN)) lvi.ForeColor = Color.Red;
+                        else lvi.ForeColor = Color.Blue;
+                        //
+                        listview_allBookOfPerson.Items.Add(lvi);
+                    }
+                    listview_allBookOfPerson.EndUpdate();
+                }
+
+
+                readerAll.Close();
+                cmdAll.Dispose();
                 conn.Close();
                 conn.Dispose();
                 System.GC.Collect();

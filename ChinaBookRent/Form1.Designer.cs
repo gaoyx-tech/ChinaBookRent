@@ -310,7 +310,7 @@ namespace ChinaBookRent
             sc.Port = 587;  //需要显式的设置端口号，否则也不能发送成功
             sc.UseDefaultCredentials = false;
             sc.EnableSsl = true;
-            sc.Credentials = new System.Net.NetworkCredential(mailFrom, "podpctjgliovbfdb");
+            sc.Credentials = new System.Net.NetworkCredential(mailFrom, "juzlisnqzwsibdbd");
             sc.Send(msg);
             dataAttachment.Dispose();//附件发送完成后，需要释放，否则相关文件会是用户锁定状态
         }

@@ -324,7 +324,13 @@ namespace ChinaBookRent
                 }
                 catch (System.SystemException e1)
                 {
-                    System.Windows.Forms.MessageBox.Show("无法获取图书信息，请自行输入，哈哈哈！");
+                    //如果豆瓣图书API没有数据
+                    TextBox_bookName.Clear();
+                    TextBox_bookPublisher.Clear();
+                    TextBox_bookValue.Clear();
+                    lb_intro.Text = "";
+                    lb_author.Text = "";
+                    pic_cover.Image = null;
                 }
             }
         }
@@ -401,10 +407,18 @@ namespace ChinaBookRent
             cmd.CommandText = sql_insert;
             cmd.Connection = conn;
             cmd.ExecuteNonQuery();
+            //
+            //同时插入rentallbookofperson表中
+            sql_insert = string.Format("insert into RentAllBookOfPerson values ('{0}','{1}','{2}')", TextBox_bookName.Text, TextBox_bookISBN.Text, TextBox_personCardNum.Text);
+            System.Data.SQLite.SQLiteCommand cmdAll = new System.Data.SQLite.SQLiteCommand();
+            cmdAll.CommandText = sql_insert;
+            cmdAll.Connection = conn;
+            cmdAll.ExecuteNonQuery();
+
             System.Windows.Forms.MessageBox.Show("新建借书成功", "提示");
             //
-            //
             cmd.Dispose();
+            cmdAll.Dispose();
             conn.Close();
             conn.Dispose();
             System.GC.Collect();
