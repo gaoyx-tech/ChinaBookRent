@@ -1,72 +1,99 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
+using System;
 
 namespace ChinaBookRent
 {
     partial class Form1
     {
-        private Label label_backBookISBN;
-        private Label label_backPersonCardNum;
-        //
-        private TextBox textBox_backBookISBN;
-        private TextBox textBox_backPersonCardNum;
-        //
-        //private Button btn_startBackBook;
+        Graphics graphical = null;
+        Pen pen = null;
+        System.Collections.ArrayList arrayRentData = new System.Collections.ArrayList();
 
         private void initTabPage3()
         {
-            tabPage3.BackColor = Color.AliceBlue;
-
-            this.label_backBookISBN = new Label();
-            this.label_backBookISBN.Location = new Point(50, 50);
-            this.label_backBookISBN.Text = "请输入书籍ISBN号码：";
-            this.label_backBookISBN.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_backBookISBN.AutoSize = true;
-            this.tabPage3.Controls.Add(label_backBookISBN);
-            //
-            textBox_backBookISBN = new TextBox();
-            textBox_backBookISBN.Location = new Point(50 + label_backBookISBN.Size.Width + 20, 45);
-            this.textBox_backBookISBN.Size = new Size(textBox_backBookISBN.Size.Width + 130, textBox_backBookISBN.Size.Height);
-            this.tabPage3.Controls.Add(textBox_backBookISBN);
-
-            //
-            this.label_backPersonCardNum = new Label();
-            this.label_backPersonCardNum.Location = new Point(50, 130);
-            this.label_backPersonCardNum.Text = "请输入人员卡号：";
-            this.label_backPersonCardNum.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_backPersonCardNum.AutoSize = true;
-            this.tabPage3.Controls.Add(label_backPersonCardNum);
-            //
-            textBox_backPersonCardNum = new TextBox();
-            textBox_backPersonCardNum.Location = new Point(50 + label_backPersonCardNum.Size.Width + 20, 125);
-            this.textBox_backPersonCardNum.Size = new Size(textBox_backPersonCardNum.Size.Width + 130, textBox_backPersonCardNum.Size.Height);
-            this.tabPage3.Controls.Add(textBox_backPersonCardNum);
-
-            //
-            //
-            //btn_startBackBook = new Button();
-            //btn_startBackBook.Location = new Point(50 + label_backPersonCardNum.Size.Width + 20, 170);
-            //btn_startBackBook.AutoSize = true;
-            //btn_startBackBook.Text = "还书";
-            //btn_startBackBook.Font = new Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            //this.tabPage3.Controls.Add(btn_startBackBook);
-            //btn_startBackBook.Click += Btn_startBackBook_Click;
+            this.tabPage3.BackColor = Color.White;
+            this.tabPage3.Paint += Form1_Paint;
+            caculateRentBookData();
         }
 
-        //private void Btn_startBackBook_Click(object sender, System.EventArgs e)
-        //{
-        //    System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection("Data Source=C:\\MyOwnProject\\ChinaBookRent\\ChinaBookRent\\bin\\Debug\\ChinaBookRent.db;Pooling=true;FailIfMissing=false");
-        //    conn.Open();
-        //    //
-        //    string sql_del = string.Format("delete from RentBookInfo where bookISBN = '{0}' and personCardNum = '{1}'", textBox_backBookISBN.Text, textBox_backPersonCardNum.Text);
-        //    System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
-        //    cmd.CommandText = sql_del;
-        //    cmd.Connection = conn;
-        //    cmd.ExecuteNonQuery();
-        //    MessageBox.Show("还书成功", "提示");
-        //    //
-        //    cmd.Dispose();
-        //    conn.Close();
-        //}
+        private void caculateRentBookData()
+        {
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
+            conn.Open();
+            for (int i = 0; i < 10; ++i)
+            {
+                DateTime reduce = DateTime.Now - new TimeSpan(1 * i, 0, 0, 0);
+                string sql = string.Format("select * from RentBookInfo where bookOutDate = '{0}'", reduce.GetDateTimeFormats().GetValue(10));
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = sql;
+                cmd.Connection = conn;
+                System.Data.SQLite.SQLiteDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    int count = 0;
+                    while (reader.Read()) { ++count; }
+                    arrayRentData.Add(count);
+                }
+                else arrayRentData.Add(0);
+
+                //
+                reader.Close();
+                cmd.Dispose();
+            }
+            conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+
+            Invalidate();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            graphical = e.Graphics;
+            pen = new Pen(Color.Black, 3);
+            //
+            pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+            graphical.DrawLine(pen, new Point(100, 640), new Point(100, 40));
+            graphical.DrawLine(pen, new Point(100, 640), new Point(1100, 640));
+            //10天的数据
+            DateTime dtNow = DateTime.Now;
+            //单色填充 定义单色画刷  
+            SolidBrush b1 = new SolidBrush(Color.Black);
+            for (int i = 0; i < 10; ++i)
+            {
+                //字符串日期
+                DateTime reduce = dtNow - new TimeSpan(1 * i, 0, 0, 0);
+                string reduceStr = reduce.ToShortDateString();
+                graphical.DrawString(reduceStr, new Font("黑体", 11), b1, new PointF(100 * i + 70, 650));
+                //小竖杠
+                Pen penSmall = new Pen(Color.Black, 3);
+                penSmall.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+                graphical.DrawLine(penSmall, new Point(100 * i + 100, 637), new Point(100 * i + 100, 640));
+            }
+
+            //Y轴的100本基准书
+            for (int i = 0; i < 101; ++i)
+            {
+                if (i % 5 != 0) continue;
+                Pen penSmall = new Pen(Color.Brown, 3);
+                penSmall.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+                graphical.DrawLine(penSmall, new Point(95, 640 - i * 6), new Point(100, 640 - i * 6));
+                //
+                graphical.DrawString(string.Format("{0}本", i), new Font("黑体", 11), b1, new Point(50, 635 - i * 6));
+            }
+            graphical.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //折线
+            for (int i = 0; i < arrayRentData.Count; ++i)
+            {
+                if (i == arrayRentData.Count - 1) break;
+                Pen penSmall = new Pen(Color.IndianRed, 3);
+                penSmall.EndCap = System.Drawing.Drawing2D.LineCap.Square;
+                graphical.DrawLine(penSmall, new Point(100 * i + 100, 640 - System.Int16.Parse(arrayRentData[i].ToString()) * 6), new Point(100 * (i+1) + 100, 640 - System.Int16.Parse(arrayRentData[i+1].ToString()) * 6));
+                //
+                graphical.DrawEllipse(penSmall, 100 * i + 98, 639 - System.Int16.Parse(arrayRentData[i].ToString()) * 6, 4, 4);
+            }
+        }
     }
 }

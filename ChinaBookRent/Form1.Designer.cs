@@ -223,7 +223,7 @@ namespace ChinaBookRent
             btn_DataToServer.Location = new System.Drawing.Point(1200, 20);
             btn_DataToServer.Size = new System.Drawing.Size(200, 30);
             btn_DataToServer.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            btn_DataToServer.Text = "数 据 同 步";
+            btn_DataToServer.Text = "数据同步";
             this.Controls.Add(btn_DataToServer);
             btn_DataToServer.Click += Btn_DataToServer_Click;
             // 
@@ -231,10 +231,10 @@ namespace ChinaBookRent
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            //this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Font = new System.Drawing.Font("幼圆", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Font = new System.Drawing.Font("黑体", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabControl1.Location = new System.Drawing.Point(0, 59);
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1917, 948);
@@ -268,7 +268,7 @@ namespace ChinaBookRent
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(1909, 914);
             this.tabPage3.TabIndex = 1;
-            this.tabPage3.Text = "办理还回书籍";
+            this.tabPage3.Text = "数据展示";
             this.tabPage3.UseVisualStyleBackColor = true;
             //
             initTabPage3();

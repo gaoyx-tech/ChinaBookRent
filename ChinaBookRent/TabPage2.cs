@@ -169,21 +169,22 @@ namespace ChinaBookRent
 
             //书籍封面
             pic_cover = new System.Windows.Forms.PictureBox();
-            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 530, 145);
-            pic_cover.Size = new System.Drawing.Size(120, 180);
+            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 536, 145);
+            pic_cover.Size = new System.Drawing.Size(150, 210);
+            pic_cover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.tabPage2.Controls.Add(pic_cover);
 
             //
             //
             lb_intro = new System.Windows.Forms.Label();
-            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 460, 360);
+            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 460, 390);
             lb_intro.Size = new System.Drawing.Size(400, 300);
             lb_intro.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_intro);
 
             //
             lb_author = new System.Windows.Forms.Label();
-            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 460, 335);
+            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 460, 365);
             lb_author.AutoSize = true;
             lb_author.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_author);
@@ -324,7 +325,7 @@ namespace ChinaBookRent
                         TextBox_bookPublisher.Text = bookInfo.publisher;
                         TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY", "").Replace("¥", "").Trim();
                         //
-                        System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.images.medium).GetResponse().GetResponseStream());
+                        System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.images.large).GetResponse().GetResponseStream());
                         pic_cover.Image = imageNet;
                         //
                         string sIntro = string.Format("书籍简介：{0}", bookInfo.summary);
