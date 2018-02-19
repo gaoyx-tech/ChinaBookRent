@@ -450,6 +450,8 @@ namespace ChinaBookRent
             cmdAll.ExecuteNonQuery();
 
             System.Windows.Forms.MessageBox.Show("新建借书成功", "提示");
+            //借书成功后，自动清空ISBN，方便扫码
+            btn_clearISBN.PerformClick();
             //
             cmd.Dispose();
             cmdAll.Dispose();

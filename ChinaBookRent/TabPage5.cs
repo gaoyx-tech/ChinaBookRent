@@ -65,7 +65,7 @@ namespace ChinaBookRent
             listview_personInfos.View = View.Details;
             listview_personInfos.FullRowSelect = true;
             listview_personInfos.GridLines = true;
-            listview_personInfos.Columns.Add("姓名", 100, HorizontalAlignment.Center);
+            listview_personInfos.Columns.Add("姓名", 180, HorizontalAlignment.Center);
             listview_personInfos.Columns.Add("身份证号", 200, HorizontalAlignment.Center);
             listview_personInfos.Columns.Add("借书卡号", 180, HorizontalAlignment.Center);
             listview_personInfos.Columns.Add("手机号", 160, HorizontalAlignment.Center);
@@ -276,12 +276,18 @@ namespace ChinaBookRent
                     string personNum = reader.GetString(1);
                     string personCardNo = reader.GetString(2);
                     string mobile = reader.GetString(3);
+
                     //
                     ListViewItem lvi = new ListViewItem();
                     lvi.Text = personName;
                     lvi.SubItems.Add(personNum);
                     lvi.SubItems.Add(personCardNo);
                     lvi.SubItems.Add(mobile);
+                    
+                    if (personName.Contains("已销卡"))
+                    {
+                        lvi.ForeColor = Color.ForestGreen;
+                    }
                     listview_personInfos.Items.Add(lvi);
                 }
                 this.listview_personInfos.EndUpdate();

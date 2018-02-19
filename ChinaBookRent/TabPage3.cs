@@ -9,21 +9,47 @@ namespace ChinaBookRent
         Graphics graphical = null;
         Pen pen = null;
         System.Collections.ArrayList arrayRentData = new System.Collections.ArrayList();
+        //
+        DateTimePicker datePicker;
 
         private void initTabPage3()
         {
             this.tabPage3.BackColor = Color.White;
             this.tabPage3.Paint += Form1_Paint;
+            Timer timer = new Timer();
+            timer.Interval = 30000;
+            timer.Enabled = true;
+            timer.Start();
+            timer.Tick += Timer_Tick;
+            //
+            datePicker = new DateTimePicker();
+            datePicker.Location = new Point(1150, 50);
+            datePicker.Value = DateTime.Now;
+            this.tabPage3.Controls.Add(datePicker);
             caculateRentBookData();
+            datePicker.ValueChanged += DatePicker_ValueChanged;
+        }
+
+        private void DatePicker_ValueChanged(object sender, EventArgs e)
+        {
+            caculateRentBookData();
+            this.tabPage3.Invalidate();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            caculateRentBookData();
+            this.tabPage3.Invalidate();
         }
 
         private void caculateRentBookData()
         {
+            arrayRentData.Clear();
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             for (int i = 0; i < 10; ++i)
             {
-                DateTime reduce = DateTime.Now - new TimeSpan(1 * i, 0, 0, 0);
+                DateTime reduce = datePicker.Value - new TimeSpan(1 * i, 0, 0, 0);
                 string sql = string.Format("select * from RentBookInfo where bookOutDate = '{0}'", reduce.GetDateTimeFormats().GetValue(10));
                 System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
                 cmd.CommandText = sql;
@@ -58,13 +84,13 @@ namespace ChinaBookRent
             graphical.DrawLine(pen, new Point(100, 640), new Point(100, 40));
             graphical.DrawLine(pen, new Point(100, 640), new Point(1100, 640));
             //10天的数据
-            DateTime dtNow = DateTime.Now;
+            //DateTime dtNow = DateTime.Now;
             //单色填充 定义单色画刷  
             SolidBrush b1 = new SolidBrush(Color.Black);
             for (int i = 0; i < 10; ++i)
             {
                 //字符串日期
-                DateTime reduce = dtNow - new TimeSpan(1 * i, 0, 0, 0);
+                DateTime reduce = datePicker.Value - new TimeSpan(1 * i, 0, 0, 0);
                 string reduceStr = reduce.ToShortDateString();
                 graphical.DrawString(reduceStr, new Font("黑体", 11), b1, new PointF(100 * i + 70, 650));
                 //小竖杠

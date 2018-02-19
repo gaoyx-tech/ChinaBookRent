@@ -118,7 +118,7 @@ namespace ChinaBookRent
             //
             this.btn_deletePerson = new System.Windows.Forms.Button();
             this.btn_deletePerson.Location = new System.Drawing.Point(300, 510);
-            this.btn_deletePerson.Text = "删除借书人员";
+            this.btn_deletePerson.Text = "注销借书人员";
             this.btn_deletePerson.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btn_deletePerson.Size = new System.Drawing.Size(btn_deletePerson.Size.Width + 80, btn_deletePerson.Size.Height + 10);
             this.tabPage1.Controls.Add(btn_deletePerson);
@@ -127,7 +127,7 @@ namespace ChinaBookRent
             this.label_delPersonNote.AutoSize = true;
             this.label_delPersonNote.Location = new System.Drawing.Point(470, 518);
             this.label_delPersonNote.Font = new System.Drawing.Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_delPersonNote.Text = "（注：删除借书人记录只需填写借书人姓名以及卡号，其他非必须）";
+            this.label_delPersonNote.Text = "（注：注销借书人记录只需填写借书人姓名以及卡号，其他非必须）";
             this.tabPage1.Controls.Add(label_delPersonNote);
 
             //
@@ -152,7 +152,7 @@ namespace ChinaBookRent
             cmd.CommandText = sql_del;
             cmd.Connection = conn;
             cmd.ExecuteNonQuery();
-            System.Windows.Forms.MessageBox.Show("删除借书人员成功", "提示");
+            System.Windows.Forms.MessageBox.Show("注销借书人员成功", "提示");
             //
             cmd.Dispose();
             conn.Close();
@@ -268,7 +268,7 @@ namespace ChinaBookRent
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(1909, 914);
             this.tabPage3.TabIndex = 1;
-            this.tabPage3.Text = "数据展示";
+            this.tabPage3.Text = "实时数据展示";
             this.tabPage3.UseVisualStyleBackColor = true;
             //
             initTabPage3();
