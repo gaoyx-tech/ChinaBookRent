@@ -31,6 +31,9 @@ namespace ChinaBookRent
         private System.Windows.Forms.Button btn_createPerson;
         private System.Windows.Forms.Button btn_deletePerson;
         private System.Windows.Forms.Label label_delPersonNote;
+        //
+        private System.Windows.Forms.Button btn_modifyPerson;
+        private System.Windows.Forms.Label lb_modifyNote;
 
         private void initTabPage1()
         {
@@ -126,13 +129,74 @@ namespace ChinaBookRent
             this.label_delPersonNote = new System.Windows.Forms.Label();
             this.label_delPersonNote.AutoSize = true;
             this.label_delPersonNote.Location = new System.Drawing.Point(470, 518);
-            this.label_delPersonNote.Font = new System.Drawing.Font("黑体", 13F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_delPersonNote.Text = "（注：注销借书人记录只需填写借书人姓名以及卡号，其他非必须）";
+            this.label_delPersonNote.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_delPersonNote.Text = "注：注销借书人记录只需填写借书人姓名以及卡号，其他非必须";
             this.tabPage1.Controls.Add(label_delPersonNote);
 
+            //修改人员信息按钮
+            this.btn_modifyPerson = new System.Windows.Forms.Button();
+            this.btn_modifyPerson.Size = new System.Drawing.Size(btn_modifyPerson.Size.Width + 80, btn_modifyPerson.Size.Height + 10);
+            this.btn_modifyPerson.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btn_modifyPerson.Location = new System.Drawing.Point(100, 570);
+            this.btn_modifyPerson.Text = "修改人员信息";
+            this.tabPage1.Controls.Add(btn_modifyPerson);
+            //
+            this.lb_modifyNote = new System.Windows.Forms.Label();
+            this.lb_modifyNote.AutoSize = true;
+            this.lb_modifyNote.Font = new System.Drawing.Font("黑体", 12F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lb_modifyNote.Text = "注：修改人员信息必须先填入正确的卡号，然后再在修改项目中填入正确的，不修改的项目空白即可";
+            this.lb_modifyNote.Location = new System.Drawing.Point(100 + btn_modifyPerson.Width + 20, 578);
+            this.tabPage1.Controls.Add(lb_modifyNote);
             //
             this.btn_createPerson.Click += Btn_createPerson_Click;
             this.btn_deletePerson.Click += Btn_deletePerson_Click;
+            btn_modifyPerson.Click += Btn_modifyPerson_Click;
+        }
+
+        private void Btn_modifyPerson_Click(object sender, System.EventArgs e)
+        {
+            //
+            System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
+            conn.Open();
+            string strUpdate = "";
+            //修改姓名
+            if (TextBoxPersonName.Text.Length != 0)
+            {
+                strUpdate = string.Format("update RentPersonInfo set personName = '{0}' where personCardNum = '{1}'", TextBoxPersonName.Text, TextBoxPersonCardNum.Text);
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = strUpdate;
+                cmd.Connection = conn;
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+            }
+
+            //修改身份证号
+            if (TextBoxPersonNum.Text.Length != 0)
+            {
+                strUpdate = string.Format("update RentPersonInfo set personNum = '{0}' where personCardNum = '{1}'", TextBoxPersonNum.Text, TextBoxPersonCardNum.Text);
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = strUpdate;
+                cmd.Connection = conn;
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+            }
+
+            //修改手机号
+            if (TextBoxPersonNum.Text.Length != 0)
+            {
+                strUpdate = string.Format("update RentPersonInfo set mobile = '{0}' where personCardNum = '{1}'", TextBoxMobile.Text, TextBoxPersonCardNum.Text);
+                System.Data.SQLite.SQLiteCommand cmd = new System.Data.SQLite.SQLiteCommand();
+                cmd.CommandText = strUpdate;
+                cmd.Connection = conn;
+                cmd.ExecuteNonQuery();
+                cmd.Dispose();
+            }
+            //
+            conn.Close();
+            conn.Dispose();
+            System.GC.Collect();
+            System.GC.WaitForPendingFinalizers();
+            System.Windows.Forms.MessageBox.Show("修改信息成功");
         }
 
         private void Btn_deletePerson_Click(object sender, System.EventArgs e)
