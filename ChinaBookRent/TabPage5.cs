@@ -258,7 +258,7 @@ namespace ChinaBookRent
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
             //
-            string sql_findInfo = "select * from RentPersonInfo";
+            string sql_findInfo = "select * from RentPersonInfo order by personCardNum";
             if (cb_personCondition.SelectedIndex == 1) sql_findInfo = string.Format("select * from RentPersonInfo where personName = '{0}'", tb_personCondition.Text);
             else if (cb_personCondition.SelectedIndex == 2) sql_findInfo = string.Format("select * from RentPersonInfo where personCardNum = '{0}'", tb_personCondition.Text);
             else if (cb_personCondition.SelectedIndex == 3) sql_findInfo = string.Format("select * from RentPersonInfo where mobile = '{0}'", tb_personCondition.Text);

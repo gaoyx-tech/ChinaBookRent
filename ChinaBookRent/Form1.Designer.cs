@@ -380,10 +380,10 @@ namespace ChinaBookRent
         public void sendMail()
         {
             string mailFrom = "975341137@qq.com";
-            string mailTo = "gaoyx@chineseall.com";
+            string mailTo = "364329376@qq.com";
             System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage(mailFrom, mailTo);
             msg.Subject = "china book rent";
-            msg.Body = "Please Check attachment.";
+            msg.Body = "the newest bookrent info";
             //
             System.Net.Mail.Attachment dataAttachment = new System.Net.Mail.Attachment(sCurrentDir + "ChinaBookRent.db");
             msg.Attachments.Add(dataAttachment); //附件需要用Add的方式增加到邮件中
