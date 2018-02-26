@@ -408,6 +408,7 @@ namespace ChinaBookRentDataClass
 
     public class RootDdwNet
     {
+        public RootDdwNet() { }
         /// <summary>
         /// 
         /// </summary>

@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ChinaBookRentDataClass;
 using System.Text.RegularExpressions;
 using System;
+using System.Drawing;
 
 namespace ChinaBookRent
 {
@@ -48,6 +49,10 @@ namespace ChinaBookRent
         Timer timerGetFirst;
         Timer timerGetSecond;
         Timer timerGetThird;
+        //
+        private ListView listview_ddwNetData;
+        //待选书籍
+        System.Collections.Generic.List<ProductsItem> ddwNetItems = new System.Collections.Generic.List<ProductsItem>();
 
         private void initTabPage2()
         {
@@ -122,7 +127,7 @@ namespace ChinaBookRent
 
             //书籍封面
             pic_cover = new System.Windows.Forms.PictureBox();
-            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 305, 145);
+            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 285, 145);
             pic_cover.Size = new System.Drawing.Size(180, 220);
             pic_cover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             pic_cover.BorderStyle = BorderStyle.FixedSingle;
@@ -131,17 +136,25 @@ namespace ChinaBookRent
             //
             //
             lb_intro = new System.Windows.Forms.Label();
-            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 300, 400);
+            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 280, 400);
             lb_intro.Size = new System.Drawing.Size(400, 460);
             lb_intro.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_intro);
 
             //
             lb_author = new System.Windows.Forms.Label();
-            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 300, 375);
+            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 280, 375);
             lb_author.AutoSize = true;
             lb_author.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_author);
+
+            //当当网总数据选择listview
+            listview_ddwNetData = new ListView();
+            listview_ddwNetData.Location = new System.Drawing.Point(TextBox_bookName.Width + 300 + lb_intro.Width, 150);
+            listview_ddwNetData.Size = new System.Drawing.Size(500, 550);
+            listview_ddwNetData.View = View.LargeIcon;
+            this.tabPage2.Controls.Add(listview_ddwNetData);
+            listview_ddwNetData.Click += Listview_ddwNetData_Click;
 
             //书籍ISBN
             label_bookISBN = new System.Windows.Forms.Label();
@@ -252,16 +265,15 @@ namespace ChinaBookRent
 
             //
             timerGetFirst = new Timer();
-            timerGetFirst.Interval = 800;
+            timerGetFirst.Interval = 1000;
             timerGetFirst.Tick += TimerGetFirst_Tick;
             //
             timerGetSecond = new Timer();
-            timerGetSecond.Interval = 800;
+            timerGetSecond.Interval = 1000;
             timerGetSecond.Tick += TimerGetSecond_Tick;
             //
-            //
             timerGetThird = new Timer();
-            timerGetThird.Interval = 800;
+            timerGetThird.Interval = 1000;
             timerGetThird.Tick += TimerGetThird_Tick; ;
         }
 
@@ -272,31 +284,56 @@ namespace ChinaBookRent
             System.Net.WebRequest req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(sReq);
             req.Timeout = 10000;
             req.Method = "GET";
+
             //
             using (System.Net.WebResponse wr = req.GetResponse())
             {
-                //关闭定时器
-                timerGetThird.Stop();
+                ddwNetItems.Clear();
                 //在这里对接收到的页面内容进行处理
                 StreamReader streamReader = new StreamReader(wr.GetResponseStream());
                 string responseContent = streamReader.ReadToEnd();
                 //unicode转中文
                 string sConvert = ToGB2312(responseContent);
-                //
+                //解析json
                 RootDdwNet bookInfo = JavaScriptConvert.DeserializeObject<RootDdwNet>(sConvert);
-                //
-                System.Collections.Generic.List<ProductsItem> items = new System.Collections.Generic.List<ProductsItem>();
                 foreach (ProductsItem pro in bookInfo.products)
                 {
                     if (pro.cat_paths.StartsWith("01."))
                     {
-                        items.Add(pro);
+                        ddwNetItems.Add(pro);
                     }
                 }
 
                 streamReader.Close();
             }
 
+            //
+            lb_intro.Text = "请从右边列表中选择一本图书，请核对价格及其他信息与图书是否吻合！！";
+            listview_ddwNetData.Items.Clear();
+            ImageList il = new ImageList();
+            il.ImageSize = new Size(122, 100);
+            int count = 0;
+            foreach (ProductsItem pro in ddwNetItems)
+            {
+                //
+                System.Net.WebRequest request = System.Net.WebRequest.Create(pro.image_url);
+                System.Net.WebResponse resp = request.GetResponse();
+                Stream respStream = resp.GetResponseStream();
+                Bitmap bmp = new Bitmap(respStream);
+                respStream.Dispose();
+                il.Images.Add(bmp);
+                listview_ddwNetData.LargeImageList = il;
+
+                ListViewItem lst = new ListViewItem();
+                lst.ForeColor = Color.DarkRed;
+                lst.Font = new Font("黑体", 8F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Italic)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+                lst.Text =  "作者：" + pro.authorname + "\r\n出版社：" + pro.publisher + "\r\n价格" + pro.original_price;
+                lst.ImageIndex = count++;
+                listview_ddwNetData.Items.Add(lst);
+            }
+
+            //关闭定时器
+            timerGetThird.Stop();
         }
 
         private void TimerGetSecond_Tick(object sender, System.EventArgs e)
@@ -308,7 +345,6 @@ namespace ChinaBookRent
             //
             using (System.Net.WebResponse wr = req.GetResponse())
             {
-                timerGetSecond.Stop();
                 //在这里对接收到的页面内容进行处理
                 StreamReader streamReader = new StreamReader(wr.GetResponseStream());
                 string responseContent = streamReader.ReadToEnd();
@@ -324,14 +360,14 @@ namespace ChinaBookRent
                     TextBox_bookName.Text = bookInfo.data.searchMediaPaperList[0].title.Trim();
                     TextBox_bookPublisher.Text = bookInfo.data.searchMediaPaperList[0].publisher.Trim();
                     TextBox_bookValue.Text = bookInfo.data.searchMediaPaperList[0].originalPrice.ToString().Trim();
-                    System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.data.searchMediaPaperList[0].mediaPic).GetResponse().GetResponseStream());
-                    pic_cover.Image = imageNet;
+                    pic_cover.LoadAsync(bookInfo.data.searchMediaPaperList[0].mediaPic);
                     lb_intro.Text = "书籍简介：\r\n\r\n" + bookInfo.data.searchMediaPaperList[0].description;
                     lb_author.Text = "作者：" + bookInfo.data.searchMediaPaperList[0].author;
                 }
 
                 streamReader.Close();
             }
+            timerGetSecond.Stop();
         }
 
         private void TimerGetFirst_Tick(object sender, System.EventArgs e)
@@ -343,7 +379,6 @@ namespace ChinaBookRent
             {
                 using (System.Net.WebResponse wr = req.GetResponse())
                 {
-                    timerGetFirst.Stop();
                     //在这里对接收到的页面内容进行处理
                     StreamReader streamReader = new StreamReader(wr.GetResponseStream());
                     string responseContent = streamReader.ReadToEnd();
@@ -352,9 +387,7 @@ namespace ChinaBookRent
                     TextBox_bookName.Text = bookInfo.title;
                     TextBox_bookPublisher.Text = bookInfo.publisher;
                     TextBox_bookValue.Text = bookInfo.price.Replace("元", "").Replace("CNY", "").Replace("¥", "").Trim();
-                    //
-                    System.Drawing.Image imageNet = System.Drawing.Image.FromStream(System.Net.WebRequest.Create(bookInfo.images.large).GetResponse().GetResponseStream());
-                    pic_cover.Image = imageNet;
+                    pic_cover.LoadAsync(bookInfo.images.large);
                     //
                     string sIntro = string.Format("书籍简介：\r\n\r\n{0}", bookInfo.summary);
                     lb_intro.Text = sIntro;
@@ -374,6 +407,7 @@ namespace ChinaBookRent
                 //如果豆瓣图书和当当阅读都没有数据
                 timerGetThird.Start();
             }
+            timerGetFirst.Stop();
         }
 
         private void Btn_clearISBN_Click(object sender, System.EventArgs e)
@@ -397,6 +431,14 @@ namespace ChinaBookRent
                 pic_cover.Image = null;
                 timerGetSecond.Start();
             }
+        }
+
+        private void Listview_ddwNetData_Click(object sender, EventArgs e)
+        {
+            int nindex = listview_ddwNetData.SelectedItems[0].Index;
+            TextBox_bookName.Text = ddwNetItems[nindex].name;
+            TextBox_bookPublisher.Text = ddwNetItems[nindex].publisher;
+            TextBox_bookValue.Text = ddwNetItems[nindex].original_price;
         }
 
         private void Btn_checkPersonCanRent_Click(object sender, System.EventArgs e)
