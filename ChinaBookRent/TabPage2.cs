@@ -52,7 +52,7 @@ namespace ChinaBookRent
         //
         private ListView listview_ddwNetData;
         //待选书籍
-        System.Collections.Generic.List<ProductsItem> ddwNetItems = new System.Collections.Generic.List<ProductsItem>();
+        System.Collections.Generic.List<DangDangNetBean.ProductsItem> ddwNetItems = new System.Collections.Generic.List<DangDangNetBean.ProductsItem>();
 
         private void initTabPage2()
         {
@@ -127,7 +127,7 @@ namespace ChinaBookRent
 
             //书籍封面
             pic_cover = new System.Windows.Forms.PictureBox();
-            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 285, 145);
+            pic_cover.Location = new System.Drawing.Point(TextBox_bookName.Width + 325, 145);
             pic_cover.Size = new System.Drawing.Size(180, 220);
             pic_cover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             pic_cover.BorderStyle = BorderStyle.FixedSingle;
@@ -136,21 +136,21 @@ namespace ChinaBookRent
             //
             //
             lb_intro = new System.Windows.Forms.Label();
-            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 280, 400);
+            lb_intro.Location = new System.Drawing.Point(TextBox_bookName.Width + 320, 400);
             lb_intro.Size = new System.Drawing.Size(400, 460);
             lb_intro.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_intro);
 
             //
             lb_author = new System.Windows.Forms.Label();
-            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width + 280, 375);
+            lb_author.Location = new System.Drawing.Point(TextBox_bookName.Width +320, 375);
             lb_author.AutoSize = true;
             lb_author.Font = new System.Drawing.Font("黑体", 11F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabPage2.Controls.Add(lb_author);
 
             //当当网总数据选择listview
             listview_ddwNetData = new ListView();
-            listview_ddwNetData.Location = new System.Drawing.Point(TextBox_bookName.Width + 300 + lb_intro.Width, 150);
+            listview_ddwNetData.Location = new System.Drawing.Point(TextBox_bookName.Width + 340 + lb_intro.Width, 150);
             listview_ddwNetData.Size = new System.Drawing.Size(500, 550);
             listview_ddwNetData.View = View.LargeIcon;
             this.tabPage2.Controls.Add(listview_ddwNetData);
@@ -279,7 +279,7 @@ namespace ChinaBookRent
 
         private void TimerGetThird_Tick(object sender, System.EventArgs e)
         {
-            string sReq = string.Format("http://search.mapi.dangdang.com/index.php?result_set_all_count=0&access-token=&time_code=e3d18d2284002f6d05368d9588ba53cb&img_size=h&client_version=8.2.0&action=all_search&union_id=537-100475&timestamp=1519490207&permanent_id=20170531142204977636164247492279621&global_province_id=111&sort_type=default_0&keyword={0}&page_size=10&udid=95798828046877677e5d8e23f970beec&loadad=1&user_client=android&page=1&filter_from=keyword&has_used_recommend=0",
+            string sReq = string.Format("http://search.mapi.dangdang.com/index.php?result_set_all_count=0&access-token=&time_code=f0c0adf325e1152485d76452c21fa360&img_size=h&client_version=8.2.1&action=all_search&cid=01.00.00.00.00.00&union_id=537-100475&timestamp=1519893694&permanent_id=20170531142204977636164247492279621&global_province_id=111&sort_type=default_0&keyword={0}&page_size=10&udid=95798828046877677e5d8e23f970beec&loadad=0&user_client=android&page=1&filter_from=keyword,category&has_used_recommend=0",
                 TextBox_bookISBN.Text);
             System.Net.WebRequest req = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(sReq);
             req.Timeout = 10000;
@@ -294,42 +294,55 @@ namespace ChinaBookRent
                 string responseContent = streamReader.ReadToEnd();
                 //unicode转中文
                 string sConvert = ToGB2312(responseContent);
+                sConvert = sConvert.Remove(0, sConvert.IndexOf("products"));
+                sConvert = sConvert.Remove(sConvert.IndexOf("show_search_banner"));
+                sConvert = sConvert.Insert(0, "{");
+                sConvert = sConvert.Remove(sConvert.Length - 2);
+                sConvert = sConvert.Insert(sConvert.Length, "}");
                 //解析json
-                RootDdwNet bookInfo = JavaScriptConvert.DeserializeObject<RootDdwNet>(sConvert);
-                foreach (ProductsItem pro in bookInfo.products)
+                sConvert = sConvert.Replace("stars", "@");
+                string[] sArray = sConvert.Split('@');
+                for (int i = 1; i < sArray.Length; ++i)
                 {
-                    if (pro.cat_paths.StartsWith("01."))
-                    {
-                        ddwNetItems.Add(pro);
-                    }
+                    DangDangNetBean.ProductsItem item = new DangDangNetBean.ProductsItem();
+                    string sResult = sArray[i];
+                    item.name = sResult.Substring(sResult.IndexOf("name") + 7, sResult.IndexOf("subname") - sResult.IndexOf("name") - 9);
+                    item.image_url = sResult.Substring(sResult.IndexOf("image_url") + 12, sResult.IndexOf("product_url") - sResult.IndexOf("image_url") - 15).Replace("\\/","/");
+                    item.publisher = sResult.Substring(sResult.IndexOf("publisher") + 12, sResult.IndexOf("publish_date") - sResult.IndexOf("publisher") - 15);
+                    item.original_price = sResult.Substring(sResult.IndexOf("original_price") + 17, sResult.IndexOf("is_overseas") - sResult.IndexOf("original_price") - 20);
+                    ddwNetItems.Add(item);
                 }
 
                 streamReader.Close();
             }
-
-            //
-            lb_intro.Text = "请从右边列表中选择一本图书，请核对价格及其他信息与图书是否吻合！！";
-            listview_ddwNetData.Items.Clear();
-            ImageList il = new ImageList();
-            il.ImageSize = new Size(122, 100);
-            int count = 0;
-            foreach (ProductsItem pro in ddwNetItems)
+            if (ddwNetItems.Count == 0)
             {
-                //
-                System.Net.WebRequest request = System.Net.WebRequest.Create(pro.image_url);
-                System.Net.WebResponse resp = request.GetResponse();
-                Stream respStream = resp.GetResponseStream();
-                Bitmap bmp = new Bitmap(respStream);
-                respStream.Dispose();
-                il.Images.Add(bmp);
-                listview_ddwNetData.LargeImageList = il;
+                lb_intro.Text = "当当阅读，豆瓣图书，当当官网均无此数据，请手动输入！！";
+            }
+            else
+            {
+                lb_intro.Text = "请从右边列表中选择一本图书，请核对价格及其他信息与图书是否吻合！！";
+                ImageList il = new ImageList();
+                il.ImageSize = new Size(122, 100);
+                int count = 0;
+                foreach (DangDangNetBean.ProductsItem pro in ddwNetItems)
+                {
+                    //
+                    System.Net.WebRequest request = System.Net.WebRequest.Create(pro.image_url);
+                    System.Net.WebResponse resp = request.GetResponse();
+                    Stream respStream = resp.GetResponseStream();
+                    Bitmap bmp = new Bitmap(respStream);
+                    respStream.Dispose();
+                    il.Images.Add(bmp);
+                    listview_ddwNetData.LargeImageList = il;
 
-                ListViewItem lst = new ListViewItem();
-                lst.ForeColor = Color.DarkRed;
-                lst.Font = new Font("黑体", 8F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Italic)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-                lst.Text =  "作者：" + pro.authorname + "\r\n出版社：" + pro.publisher + "\r\n价格" + pro.original_price;
-                lst.ImageIndex = count++;
-                listview_ddwNetData.Items.Add(lst);
+                    ListViewItem lst = new ListViewItem();
+                    lst.ForeColor = Color.Black;
+                    lst.Font = new Font("黑体", 10F, ((System.Drawing.FontStyle)(System.Drawing.FontStyle.Regular)), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+                    lst.Text = "出版社：" + pro.publisher + "\r\n价格" + pro.original_price;
+                    lst.ImageIndex = count++;
+                    listview_ddwNetData.Items.Add(lst);
+                }
             }
 
             //关闭定时器
@@ -403,7 +416,7 @@ namespace ChinaBookRent
             }
             catch (System.SystemException e1)
             {
-                lb_intro.Text = "开始搜索当当总网数据.......";
+                lb_intro.Text = "开始搜索当当官网数据.......";
                 //如果豆瓣图书和当当阅读都没有数据
                 timerGetThird.Start();
             }
@@ -423,12 +436,14 @@ namespace ChinaBookRent
             if (sText.Length == 13)
             {
                 lb_intro.Text = "开始搜索当当阅读数据.......";
-                //
+                //重置界面数据
                 TextBox_bookName.Clear();
                 TextBox_bookPublisher.Clear();
                 TextBox_bookValue.Clear();
+                TextBox_personCardNum.Clear();
                 lb_author.Text = "";
                 pic_cover.Image = null;
+                listview_ddwNetData.Items.Clear();
                 timerGetSecond.Start();
             }
         }

@@ -215,7 +215,7 @@ namespace ChinaBookRent
                 //再查allbook表
                 listview_allBookOfPerson.Items.Clear();
                 string sqlAll = string.Format("select * from RentAllBookOfPerson where personCardNum = '{0}'", sCardNo);
-                //
+                //显示该人所有已借出和借过
                 System.Data.SQLite.SQLiteCommand cmdAll = new System.Data.SQLite.SQLiteCommand();
                 cmdAll.CommandText = sqlAll;
                 cmdAll.Connection = conn;

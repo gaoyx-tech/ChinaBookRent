@@ -15,5 +15,6 @@ C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.Properties
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csproj.GenerateResource.Cache
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.exe
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.pdb
-C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csprojResolveAssemblyReference.cache
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Release\Newtonsoft.Json.dll
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csproj.CoreCompileInputs.cache
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Release\ChinaBookRent.csprojResolveAssemblyReference.cache

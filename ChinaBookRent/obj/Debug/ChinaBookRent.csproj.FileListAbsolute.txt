@@ -16,3 +16,4 @@ C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.Properties.R
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.csproj.GenerateResource.Cache
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.exe
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.pdb
+C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.csproj.CoreCompileInputs.cache

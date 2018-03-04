@@ -111,10 +111,14 @@ namespace ChinaBookRentDataClass
         public Status status { get; set; }
         public long systemDate { get; set; }
     }
+}
 
-    //当当网总数据------------------------------------------------------------------------------------------------------------------------------------------------------------------
+namespace DangDangNetBean
+{
+    [System.Serializable]
     public class Page
     {
+        public Page() { }
         /// <summary>
         /// 
         /// </summary>
@@ -132,9 +136,10 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public string pagesize { get; set; }
     }
-
-    public class CategoriesItemDdwNet
+    [System.Serializable]
+    public class CategoriesItem
     {
+        public CategoriesItem() { }
         /// <summary>
         /// 
         /// </summary>
@@ -148,7 +153,7 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public string Count { get; set; }
         /// <summary>
-        /// 图书
+        /// 童书
         /// </summary>
         public string Name { get; set; }
         /// <summary>
@@ -160,9 +165,43 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public string ID { get; set; }
     }
-
+    [System.Serializable]
+    public class Current_cat
+    {
+        public Current_cat() { }
+        /// <summary>
+        /// 图书
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CatPath { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ClassCode { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CatID { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string guan_id { get; set; }
+        /// <summary>
+        /// 图书
+        /// </summary>
+        public string ClassName { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ID { get; set; }
+    }
+    [System.Serializable]
     public class Stars
     {
+        public Stars() { }
         /// <summary>
         /// 
         /// </summary>
@@ -172,23 +211,12 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public string has_half_star { get; set; }
     }
-
-    public class Word_highlight_keysItem
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string word { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<int> keys { get; set; }
-    }
-
+    [System.Serializable]
     public class Product_tagsItem
     {
+        public Product_tagsItem() { }
         /// <summary>
-        /// 满45-5
+        /// 赠品
         /// </summary>
         public string name { get; set; }
         /// <summary>
@@ -196,9 +224,10 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public int type { get; set; }
     }
-
+    [System.Serializable]
     public class ProductsItem
     {
+        public ProductsItem() { }
         /// <summary>
         /// 
         /// </summary>
@@ -210,7 +239,7 @@ namespace ChinaBookRentDataClass
         /// <summary>
         /// 
         /// </summary>
-        public int total_review_count { get; set; }
+        public string total_review_count { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -220,15 +249,15 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public Stars stars { get; set; }
         /// <summary>
-        /// 【旧书二手书8新正版】中外动物小说精品(升级版)：野马传奇 沈石溪 等+云间美食两册合售9787539777474
+        /// 猎豹绝唱 沈石溪 等 著
         /// </summary>
         public string name { get; set; }
         /// <summary>
-        /// 72小时内发货.需要更多联系客服，二手书不保证有光盘等附赠品
+        /// 【好评返5元店铺礼券】
         /// </summary>
         public string subname { get; set; }
         /// <summary>
-        /// 
+        /// 沈石溪 等 著
         /// </summary>
         public string authorname { get; set; }
         /// <summary>
@@ -287,6 +316,9 @@ namespace ChinaBookRentDataClass
         /// 
         /// </summary>
         public string ebook_product_id { get; set; }
+        /// <summary>
+        /// 文轩网旗舰店
+        /// </summary>
         public string shop_info { get; set; }
         /// <summary>
         /// 
@@ -309,17 +341,13 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public string is_publication { get; set; }
         /// <summary>
-        /// 
+        /// 安徽少年儿童出版社
         /// </summary>
         public string publisher { get; set; }
         /// <summary>
         /// 
         /// </summary>
         public string publish_date { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public int market_price { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -335,7 +363,7 @@ namespace ChinaBookRentDataClass
         /// <summary>
         /// 
         /// </summary>
-        public List<Word_highlight_keysItem> word_highlight_keys { get; set; }
+        public List<string> word_highlight_keys { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -405,10 +433,32 @@ namespace ChinaBookRentDataClass
         /// </summary>
         public List<Product_tagsItem> product_tags { get; set; }
     }
-
-    public class RootDdwNet
+    [System.Serializable]
+    public class Direct_category_pathItem
     {
-        public RootDdwNet() { }
+        public Direct_category_pathItem() { }
+        /// <summary>
+        /// 图书
+        /// </summary>
+        public string name { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string path { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string cid { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string id { get; set; }
+    }
+
+    [System.Serializable]
+    public class Root
+    {
+        public Root() { }
         /// <summary>
         /// 
         /// </summary>
@@ -432,7 +482,7 @@ namespace ChinaBookRentDataClass
         /// <summary>
         /// 
         /// </summary>
-        public List<CategoriesItemDdwNet> categories { get; set; }
+        public List<CategoriesItem> categories { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -440,7 +490,7 @@ namespace ChinaBookRentDataClass
         /// <summary>
         /// 
         /// </summary>
-        public List<string> current_cat { get; set; }
+        public Current_cat current_cat { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -468,7 +518,7 @@ namespace ChinaBookRentDataClass
         /// <summary>
         /// 
         /// </summary>
-        public List<string> direct_category_path { get; set; }
+        public List<Direct_category_pathItem> direct_category_path { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -508,7 +558,7 @@ namespace ChinaBookRentDataClass
         /// <summary>
         /// 
         /// </summary>
-        public List<string> banner { get; set; }
+        public List<Banner> banner { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -517,6 +567,13 @@ namespace ChinaBookRentDataClass
         /// 
         /// </summary>
         public string share_url { get; set; }
+    }
+
+    public class Banner
+    {
+        public Banner() { }
+        public string link;
+        public string img;
     }
 
 }
