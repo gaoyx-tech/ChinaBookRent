@@ -10,7 +10,6 @@ C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Debug\EntityFramework.xml
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Debug\EntityFramework.SqlServer.xml
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Debug\System.Data.SQLite.xml
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\bin\Debug\System.Data.SQLite.dll.config
-C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.csprojResolveAssemblyReference.cache
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.Form1.resources
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.Properties.Resources.resources
 C:\MyOwnProject\ChinaBookRent\ChinaBookRent\obj\Debug\ChinaBookRent.csproj.GenerateResource.Cache

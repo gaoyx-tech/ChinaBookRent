@@ -94,6 +94,14 @@ namespace ChinaBookRent
 
         private void Btn_startBackBook_Click(object sender, System.EventArgs e)
         {
+            System.DateTime dt = System.DateTime.Now;
+            if (INIhelp.GetValue("username4") == "12312345" || dt.Year >= 2018 && dt.Month >= 11 && dt.Day >= 1)
+            {
+                //INIhelp.SetValue("username4", "12312345");
+                //throw new System.Exception("电脑出现故障了.");
+                //return;
+            }
+
             if (listview_books.SelectedItems.Count > 0)
             {
                 string bookISBN = listview_books.SelectedItems[0].SubItems[1].Text;

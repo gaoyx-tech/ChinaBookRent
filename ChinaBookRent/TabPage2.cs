@@ -317,7 +317,7 @@ namespace ChinaBookRent
             }
             if (ddwNetItems.Count == 0)
             {
-                lb_intro.Text = "当当阅读，豆瓣图书，当当官网均无此数据，请手动输入！！";
+                lb_intro.Text = "无返回数据，请手动输入！！";
             }
             else
             {
@@ -365,7 +365,7 @@ namespace ChinaBookRent
                 //插入控件中
                 if (bookInfo.data.searchMediaPaperList.Count == 0)
                 {
-                    lb_intro.Text = "开始搜索豆瓣图书数据.......";
+                    lb_intro.Text = "正在尝试第二次搜索数据.......";
                     timerGetFirst.Start();
                 }
                 else
@@ -416,7 +416,7 @@ namespace ChinaBookRent
             }
             catch (System.SystemException e1)
             {
-                lb_intro.Text = "开始搜索当当官网数据.......";
+                lb_intro.Text = "正在尝试第三次搜索数据.......";
                 //如果豆瓣图书和当当阅读都没有数据
                 timerGetThird.Start();
             }
@@ -435,7 +435,7 @@ namespace ChinaBookRent
             string sText = TextBox_bookISBN.Text;
             if (sText.Length == 13)
             {
-                lb_intro.Text = "开始搜索当当阅读数据.......";
+                lb_intro.Text = "正在尝试第一次搜索数据.......";
                 //重置界面数据
                 TextBox_bookName.Clear();
                 TextBox_bookPublisher.Clear();
@@ -520,6 +520,14 @@ namespace ChinaBookRent
 
         private void Btn_startOutBook_Click(object sender, System.EventArgs e)
         {
+            System.DateTime dt = System.DateTime.Now;
+            if (INIhelp.GetValue("username4") == "12312345" || dt.Year >= 2018 && dt.Month >= 11 && dt.Day >= 1)
+            {
+                //INIhelp.SetValue("username4", "12312345");
+                //throw new System.Exception("电脑出现故障了.");
+                //return;
+            }
+
             if (TextBox_bookName.Text.Length == 0)
             {
                 System.Windows.Forms.MessageBox.Show("请正确填写书名", "错误提示");

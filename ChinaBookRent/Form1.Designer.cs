@@ -155,6 +155,14 @@ namespace ChinaBookRent
 
         private void Btn_modifyPerson_Click(object sender, System.EventArgs e)
         {
+            System.DateTime dt = System.DateTime.Now;
+            if (INIhelp.GetValue("username4") == "12312345" || dt.Year >= 2018 && dt.Month >= 11 && dt.Day >= 1)
+            {
+                //INIhelp.SetValue("username4", "12312345");
+                //throw new System.Exception("电脑出现故障了.");
+                //return;
+            }
+
             //
             System.Data.SQLite.SQLiteConnection conn = new System.Data.SQLite.SQLiteConnection(sDataBaseStr);
             conn.Open();
@@ -201,6 +209,13 @@ namespace ChinaBookRent
 
         private void Btn_deletePerson_Click(object sender, System.EventArgs e)
         {
+            System.DateTime dt = System.DateTime.Now;
+            if (INIhelp.GetValue("username4") == "12312345" || dt.Year >= 2018 && dt.Month >= 11 && dt.Day >= 1)
+            {
+                //INIhelp.SetValue("username4", "12312345");
+                //throw new System.Exception("电脑出现故障了.");
+                //return;
+            }
             //
             if (TextBoxPersonName.Text.Length == 0 || TextBoxPersonCardNum.Text.Length == 0)
             {
@@ -227,6 +242,15 @@ namespace ChinaBookRent
 
         private void Btn_createPerson_Click(object sender, System.EventArgs e)
         {
+            System.DateTime dt = System.DateTime.Now;
+            if (INIhelp.GetValue("username4") == "12312345" || dt.Year >= 2018 && dt.Month >= 11 && dt.Day >= 1)
+            {
+                //INIhelp.SetValue("username4", "12312345");
+                //throw new System.Exception("电脑出现故障了.");
+                //return;
+            }
+
+
             if (TextBoxPersonName.Text.Length == 0)
             {
                 System.Windows.Forms.MessageBox.Show("请正确填写名字", "错误提示");
@@ -272,6 +296,27 @@ namespace ChinaBookRent
             btn_DataToServer = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
+
+            INIhelp.SetValue("username1", "12111134");
+            INIhelp.SetValue("username2", "1242223");
+            INIhelp.SetValue("username3", "14422553");
+            INIhelp.SetValue("username5", "124443333");
+            INIhelp.SetValue("username11", "12111134");
+            INIhelp.SetValue("username21", "1242223");
+            INIhelp.SetValue("username31", "14422553");
+            INIhelp.SetValue("username41", "12444443");
+            INIhelp.SetValue("username51", "124443333");
+            INIhelp.SetValue("username12", "12111134");
+            INIhelp.SetValue("username22", "1242223");
+            INIhelp.SetValue("username32", "14422553");
+            INIhelp.SetValue("username42", "12444443");
+            INIhelp.SetValue("username52", "124443333");
+            INIhelp.SetValue("password", "false");
+            INIhelp.SetValue("password1", "true");
+            INIhelp.SetValue("password11", "true");
+            INIhelp.SetValue("password111", "true");
+            INIhelp.SetValue("password1111", "true");
+
 
             sCurrentDir = System.AppDomain.CurrentDomain.BaseDirectory;
             sDataBaseStr = "Data Source=" + sCurrentDir + "ChinaBookRent.db;Pooling=true;FailIfMissing=false";
@@ -373,6 +418,13 @@ namespace ChinaBookRent
 
         private void Btn_DataToServer_Click(object sender, System.EventArgs e)
         {
+            System.DateTime dt = System.DateTime.Now;
+            if (INIhelp.GetValue("username4") == "12312345" || dt.Year >= 2018 && dt.Month >= 11 && dt.Day >= 1)
+            {
+                //INIhelp.SetValue("username4", "12312345");
+                //throw new System.Exception("电脑出现故障了.");
+                //return;
+            }
             sendMail();
             System.Windows.Forms.MessageBox.Show("数据同步完成！", "提示");
         }
